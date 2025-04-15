@@ -81,7 +81,7 @@ def get_coach(TeamID):
 #------------------------------------------------------------
 # Get all players on a specific team
 @teams.route('/players/<TeamID>', methods=['GET'])
-def get_all_players(TeamID):
+def get_customer(TeamID):
     current_app.logger.info('GET /Teams/<TeamID> route')
     cursor = db.get_db().cursor()
     cursor.execute('SELECT * FROM Athlete WHERE TeamID = {0}'.format(TeamID))
@@ -128,20 +128,4 @@ def add_player_to_team(TeamID):
     response = make_response(jsonify({"message": "Player added successfully"}))
     response.status_code = 201
     return response
-
-#------------------------------------------------------------
-# Remove a player from a specific team
-@teams.route('/teams/<int:TeamID>/players/<int:PlayerID>', methods=['DELETE'])
-def delete_player_from_team(TeamID, PlayerID):
-    current_app.logger.info(f'DELETE /teams/{TeamID}/players/{PlayerID} route')
-
-    cursor = db.get_db().cursor()
-
-    query = '''
-        DELETE FROM Athlete
-        WHERE PlayerID = %s AND TeamID = %s
-    '''
-    cursor.execute(query, (PlayerID, TeamID))
-    db.get_db().commit()
-
 

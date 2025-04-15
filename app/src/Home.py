@@ -73,5 +73,13 @@ if st.button('Act as Athlete',
     st.session_state['first_name'] = 'Troy'
     st.switch_page('pages/Athlete_Home.py')
 
+if st.button('Act as Recruiter', 
+            type = 'primary', 
+            use_container_width=True):
+    st.session_state['authenticated'] = True
+    st.session_state['role'] = 'Athlete'
+    st.session_state['first_name'] = 'Cal'
+    st.switch_page('pages/recruiter_home.py')
+
 
 
