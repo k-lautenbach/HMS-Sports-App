@@ -11,50 +11,44 @@ def HomeNav():
 
 
 def AboutPageNav():
-    st.sidebar.page_link("pages/30_About.py", label="About", icon="🧠")
+    st.sidebar.page_link("pages/30_About.py", label="About", icon="❓")
 
 
-#### ------------------------ Examples for Role of pol_strat_advisor ------------------------
-def PolStratAdvHomeNav():
+#### ------------------------ Role of Athletic Director ------------------------
+def AthleticDirectorHomeNav():
     st.sidebar.page_link(
-        "pages/00_Pol_Strat_Home.py", label="Political Strategist Home", icon="👤"
+        "pages/Athletic_Director_Home.py", label="Athletic Director Home", icon="🧍‍♂️"
     )
 
-
+# EXAMPLE for link (edit/remove)
 def WorldBankVizNav():
     st.sidebar.page_link(
         "pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon="🏦"
     )
 
-
+# EXAMPLE for link (edit/remove)
 def MapDemoNav():
     st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
 
 
-## ------------------------ Examples for Role of usaid_worker ------------------------
-def ApiTestNav():
-    st.sidebar.page_link("pages/12_API_Test.py", label="Test the API", icon="🛜")
-
-
-def PredictionNav():
+## ------------------------ Role of Coach ------------------------
+def CoachHomeNav():
     st.sidebar.page_link(
-        "pages/11_Prediction.py", label="Regression Prediction", icon="📈"
+        "pages/Coach_Home.py", label="Coach Home", icon="👨‍💼"
     )
 
 
-def ClassificationNav():
-    st.sidebar.page_link(
-        "pages/13_Classification.py", label="Classification Demo", icon="🌺"
+#### ------------------------ Role of Player ------------------------
+def AthletesHomeNav():
+     st.sidebar.page_link(
+        "pages/Athlete_Home.py", label="Athlete Home", icon="🏃‍♂️"
     )
 
-
-#### ------------------------ System Admin Role ------------------------
-def AdminPageNav():
-    st.sidebar.page_link("pages/20_Admin_Home.py", label="System Admin", icon="🖥️")
-    st.sidebar.page_link(
-        "pages/21_ML_Model_Mgmt.py", label="ML Model Management", icon="🏢"
+#### ------------------------ Role of Recruiter ------------------------
+def RecruiterHomeNav():
+     st.sidebar.page_link(
+        "pages/Recruiter_Home.py", label="Recruiter Home", icon="🧑‍💻"
     )
-
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
@@ -63,7 +57,7 @@ def SideBarLinks(show_home=False):
     """
 
     # add a logo to the sidebar always
-    st.sidebar.image("assets/logo.png", width=150)
+    st.sidebar.image("assets/bfa.logo.png", width=150)
 
     # If there is no logged in user, redirect to the Home (Landing) page
     if "authenticated" not in st.session_state:
@@ -77,21 +71,23 @@ def SideBarLinks(show_home=False):
     # Show the other page navigators depending on the users' role.
     if st.session_state["authenticated"]:
 
-        # Show World Bank Link and Map Demo Link if the user is a political strategy advisor role.
-        if st.session_state["role"] == "pol_strat_advisor":
-            PolStratAdvHomeNav()
-            WorldBankVizNav()
-            MapDemoNav()
+        # if the user role is an athletic director, give them acces to the AD page
+        if st.session_state["role"] == "athletic_director":
+            AthleticDirectorHomeNav()
+            EXAMPLE: WorldBankVizNav()
+            EXAMPLE: MapDemoNav()
 
-        # If the user role is usaid worker, show the Api Testing page
-        if st.session_state["role"] == "usaid_worker":
-            PredictionNav()
-            ApiTestNav()
-            ClassificationNav()
+        # If the user role is coach, give them access to the coach page
+        if st.session_state["role"] == "coach":
+            CoachHomeNav()
 
-        # If the user is an administrator, give them access to the administrator pages
-        if st.session_state["role"] == "administrator":
-            AdminPageNav()
+        # If the user is an player, give them access to the athlete pages
+        if st.session_state["role"] == "athlete":
+            AthletesHomeNav()
+
+         # If the user is a recruiter, give them access to the recruiter pages
+        if st.session_state["role"] == "recruiter":
+            RecruiterHomeNav()
 
     # Always show the About page at the bottom of the list of links
     AboutPageNav()

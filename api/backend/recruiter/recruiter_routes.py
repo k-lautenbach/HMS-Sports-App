@@ -70,3 +70,34 @@ def get_hs_teams_in_area():
     cursor.execute(query, (state,))
     theData = cursor.fetchall()
     return jsonify(theData), 200
+
+#------------------------------------------------------------------
+# gets all athletes on one team and compares their stats
+@recruiter.route('/recruiter/compare', methods=['GET'])
+def compare_stats():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT *
+        FROM Athlete JOIN AthleteStats ON Athlete.PlayerID = AthleteStats.PlayerID
+        WHERE Athlete.TeamID = %s
+    '''
+    team = request.args.get('TeamID')
+    cursor.execute(query,(team,) )
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
+
+#------------------------------------------------------------------
+# gets athlete contact info
+@recruiter.route('/athlete/contact', methods=['GET'])
+def get_athlete_contact():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT *
+        FROM Athlete a JOIN Contact c
+        ON a.ContactID = c.ContactID
+        WHERE a.PlayerID = %s
+    '''
+    playerid = request.args.get('PlayerID')
+    cursor.execute(query,(playerid,) )
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
