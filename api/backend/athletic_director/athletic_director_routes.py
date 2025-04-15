@@ -8,7 +8,6 @@ from flask import jsonify
 from flask import make_response
 from flask import current_app
 from backend.db_connection import db
-from backend.ml_models.model01 import predict
 #------------------------------------------------------------------
 #gets all of the schools a player has saved (for recruitment)
 athletic_director = Blueprint('athletic_director', __name__)
