@@ -4,6 +4,9 @@ from backend.db_connection import db
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.simple.simple_routes import simple_routes
+
+from backend.players.players_routes import players
+
 import os
 from dotenv import load_dotenv
 
@@ -35,13 +38,16 @@ def create_app():
     app.logger.info('current_app(): starting the database connection')
     db.init_app(app)
 
-
+    # blueprint: collection of created routes in flask 
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
     app.logger.info('current_app(): registering blueprints with Flask app object.')   
     app.register_blueprint(simple_routes)
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
+    app.register_blueprint(players,    url_prefix='/a')
+    app.register_blueprint(athletic_director,    url_prefix='/d')
+
 
     # Don't forget to return the app object
     return app
