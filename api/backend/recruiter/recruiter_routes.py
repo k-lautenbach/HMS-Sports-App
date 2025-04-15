@@ -41,3 +41,32 @@ def delete_recruiter_event():
     cursor.execute(query, (recruiter_id, event_id))
     db.get_db().commit()
     return jsonify({'message': f'Successfully removed {event_id} from recruiter {recruiter_id}\'s events'}), 200
+
+#------------------------------------------------------------------
+# gets all players of a certain position
+@recruiter.route('/recruiter/playerposition', methods=['GET'])
+def get_all_players(Position):
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT Athlete.PlayerID, Athlete.FirstName, Athlete.LastName, Athlete.Gender, Athlete.GPA, Athlete.GradeLevel, Athlete.Height, Athlete.Position, Athlete.RecruitmentStatus, Athlete.ContactID, Athlete.TeamID
+        FROM Athlete
+        WHERE Position = %s;
+    '''
+    cursor.execute(query)
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
+
+#------------------------------------------------------------------
+# gets all teams in a certain state
+@recruiter.route('/recruiter/state_teams', methods=['GET'])
+def get_hs_teams_in_area():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT *
+        FROM Team
+        WHERE State = %s
+    '''
+    state = request.args.get('state')
+    cursor.execute(query, (state,))
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
