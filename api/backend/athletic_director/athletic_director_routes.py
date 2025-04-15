@@ -80,7 +80,7 @@ def add_player():
 #------------------------------------------------------------------
 # deletes a player
 athletic_director = Blueprint('athletic_director', __name__)
-@athletic_director.route('/athletic_director/deleteplayer', methods=['POST'])
+@athletic_director.route('/athletic_director/deleteplayer', methods=['DELETE'])
 def delete_player():
     cursor = db.get_db().cursor()
     player_id = request.args.get('player_id')
@@ -115,7 +115,7 @@ def add_coach():
 #------------------------------------------------------------------
 # deletes a coach
 athletic_director = Blueprint('athletic_director', __name__)
-@athletic_director.route('/athletic_director/deletecoach', methods=['POST'])
+@athletic_director.route('/athletic_director/deletecoach', methods=['DELETE'])
 def delete_coach():
     cursor = db.get_db().cursor()
     coach_id = request.args.get('coach_id')
@@ -150,7 +150,7 @@ def add_game():
 #------------------------------------------------------------------
 # deletes a game
 athletic_director = Blueprint('athletic_director', __name__)
-@athletic_director.route('/athletic_director/deletegame', methods=['POST'])
+@athletic_director.route('/athletic_director/deletegame', methods=['DELETE'])
 def delete_game():
     cursor = db.get_db().cursor()
     game_id = request.args.get('game_id')
