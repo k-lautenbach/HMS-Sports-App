@@ -132,22 +132,6 @@ CREATE TABLE SchoolsOfInterest (
     FOREIGN KEY (TeamID) REFERENCES CollegeTeam(TeamID)
 );
 
-CREATE TABLE Messages (
-    MessageID INT PRIMARY KEY,
-    SenderID INT,
-    ReceiverID INT,
-    CoachID INT,
-    RecruiterID INT,
-    DirectorID INT,
-    MessageText TEXT,
-    Timestamp DATETIME,
-    FOREIGN KEY (SenderID) REFERENCES Athlete(PlayerID),
-    FOREIGN KEY (ReceiverID) REFERENCES Athlete(PlayerID),
-    FOREIGN KEY (CoachID) REFERENCES Coach(CoachID),
-    FOREIGN KEY (RecruiterID) REFERENCES Recruiter(RecruiterID),
-    FOREIGN KEY (DirectorID) REFERENCES AthleticDirector(DirectorID)
-);
-
 CREATE TABLE AthleteEvent (
     PlayerID INT,
     EventID INT,
@@ -177,6 +161,7 @@ INSERT INTO Contact (ContactID, Phone, Email, Address) VALUES
 (2, '8012925389', 'jackbolton@easthigh.edu', '3642 Lang Avenue'),
 (3, '5306905699', 'calgoldstein@berkeley.edu', '1660 Providence Lane'),
 (4, '8017487170', 'johnjames@easthigh.edu', '2516 Hickory Street');
+
 
 
 INSERT INTO Coach (CoachID, FirstName, LastName, ContactID) VALUES
