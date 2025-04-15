@@ -5,6 +5,8 @@ from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.simple.simple_routes import simple_routes
 from backend.teams.teams_routes import teams
+from backend.athletic_director.athletic_director_routes import athletic_director
+from backend.players.players_routes import players
 
 import os
 from dotenv import load_dotenv
@@ -41,6 +43,10 @@ def create_app():
     # and give a url prefix to each
     app.logger.info('current_app(): registering blueprints with Flask app object.')   
     app.register_blueprint(simple_routes)
+    app.register_blueprint(customers,   url_prefix='/c')
+    app.register_blueprint(products,    url_prefix='/p')
+    app.register_blueprint(players,    url_prefix='/a')
+    app.register_blueprint(athletic_director,    url_prefix='/d')
     app.register_blueprint(teams, url_prefix='/t')
 
     # Don't forget to return the app object
