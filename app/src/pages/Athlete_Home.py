@@ -38,7 +38,7 @@ with top[0]:
     st.text("Age: 17")
 
 with top[1]:
-    st.image("assets/troyboltonpfp.webp", width=130)
+    st.image("assets/troyboltonpfp.jpeg", width=130)
 
 with top[2]:
     st.markdown("### Athlete")
@@ -66,7 +66,7 @@ with mid[2]:
 import requests
 PLAYER_ID = 1
 
-response = requests.get(f"http://api:4000/a/athlete/{PLAYER_ID}")
+response = requests.get(f"http://api:4000/a/players/{PLAYER_ID}")
 response.raise_for_status()
 info = response.json()
 
