@@ -39,7 +39,25 @@ def get_all_players():
     cursor.execute(query)
     theData = cursor.fetchall()
     return jsonify(theData), 200
+#------------------------------------------------------------------
+@players.route('/players/<int:player_id>', methods=['GET'])
+def get_player_by_id(player_id):
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT PlayerID, FirstName, LastName, Gender, GPA, GradeLevel, Height,
+               Position, RecruitmentStatus, ContactID, TeamID
+        FROM Athlete
+        WHERE PlayerID = %s;
+    '''
+    cursor.execute(query, (player_id,))
+    result = cursor.fetchone()
 
+    if result:
+        columns = [col[0] for col in cursor.description]
+        player_data = dict(zip(columns, result))
+        return jsonify(player_data), 200
+    else:
+        return jsonify({'error': 'Player not found'}), 404
 #------------------------------------------------------------------
 #gets all practices (for specific player)
 @players.route('/players/practices', methods=['GET'])
