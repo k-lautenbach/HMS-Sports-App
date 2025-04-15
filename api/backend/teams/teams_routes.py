@@ -46,7 +46,7 @@ def get_team(TeamID):
 # Get all coaches 
 
 @teams.route('/coaches', methods=['GET'])
-def get_all_teams():
+def get_all_coaches():
     cursor = db.get_db().cursor()
     query = '''
         SELECT CoachID, FirstName, LastName
@@ -81,7 +81,7 @@ def get_coach(TeamID):
 #------------------------------------------------------------
 # Get all players on a specific team
 @teams.route('/players/<TeamID>', methods=['GET'])
-def get_customer(TeamID):
+def get_all_players(TeamID):
     current_app.logger.info('GET /Teams/<TeamID> route')
     cursor = db.get_db().cursor()
     cursor.execute('SELECT * FROM Athlete WHERE TeamID = {0}'.format(TeamID))
