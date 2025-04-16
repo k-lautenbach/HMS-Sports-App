@@ -47,14 +47,29 @@ with prof_layout[0]:
 
 mid = st.columns(3)
 school_name = 'East High'
-api_url = 'http://api:4000/d/teams/'
+base_url = 'http://api:4000/d/teams'
 params = {'high_school': school_name}
+response = requests.get(base_url, params=params)
 
-response = requests.get(api_url, params=params)
-response.raise_for_status()
+def get_teams():
+ try:
+        response = requests.get(base_url, params=params)
+        st.write(f"Response status: {response.status_code}")
+        if response.status_code == 404:
+            st.error("API endpoint not found. Please check if the backend server is running and the endpoint exists.")
+            return []
+        if response.ok:
+            return response.json()
+        else:
+            st.error(f"API returned error: {response.status_code}")
+            st.error(f"Response text: {response.text}")
+            return []
+ except requests.exceptions.RequestException as e:
+        st.error(f"Error connecting to API: {str(e)}")
+        return []
 
-teams_data = response.json()
-number_managed = len(teams_data)
+teams = get_teams()
+number_managed = len(teams) if teams else 0
 
 
 

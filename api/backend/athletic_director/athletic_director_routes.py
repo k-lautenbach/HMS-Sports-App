@@ -23,12 +23,11 @@ def get_teams():
         WHERE Team.HighSchoolName = %s
     '''
     high_school = request.args.get('high_school')
-    cursor.execute(query, (high_school),)
+    cursor.execute(query, (high_school))
     theData = cursor.fetchall()
     return jsonify(theData), 200
 #------------------------------------------------------------------
 #gets coaches and their contacts in the athletic program at their school
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/coaches', methods=['GET'])
 def get_players():
     cursor = db.get_db().cursor()
@@ -43,9 +42,25 @@ def get_players():
     cursor.execute(query, (high_school_team),)
     theData = cursor.fetchall()
     return jsonify(theData), 200
+#--------------------------------------------------------------
+#gets all of the schools a player has saved (for recruitment)
+@athletic_director.route('/athletic_director/coaches', methods=['GET'])
+def get_coaches():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT Coach.FirstName, Coach.Last, Contact.Phone, Contact.Email
+        FROM Coach
+        JOIN Contact ON Coach.ContactID = Contact.ContactID
+        WHERE Coach.CoachID IN (
+            SELECT CoachID FROM Team WHERE HighSchoolName = %s);
+        )
+    '''
+    high_school_team = request.args.get('team_id')
+    cursor.execute(query, (high_school_team),)
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
 #------------------------------------------------------------------
 #gets all practices
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/practices', methods=['GET'])
 def get_practices():
     cursor = db.get_db().cursor()
@@ -61,12 +76,11 @@ def get_practices():
 
 #------------------------------------------------------------------
 #gets all games
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/practices', methods=['GET'])
-def get_practices():
+def get_games():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT Data, Time, Location
+        SELECT Date, Time, Location
         FROM Game
         WHERE TeamID = %s
     '''
@@ -77,7 +91,6 @@ def get_practices():
 
 #------------------------------------------------------------------
 # adds a player
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/addplayer', methods=['POST'])
 def add_player():
     cursor = db.get_db().cursor()
@@ -94,7 +107,6 @@ def add_player():
     return jsonify({'message':'Player added successfully'}), 200
 #------------------------------------------------------------------
 # deletes a player
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/deleteplayer', methods=['DELETE'])
 def delete_player():
     cursor = db.get_db().cursor()
@@ -111,7 +123,6 @@ def delete_player():
 
 #------------------------------------------------------------------
 # adds a coach
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/addcoach', methods=['POST'])
 def add_coach():
     cursor = db.get_db().cursor()
@@ -129,7 +140,6 @@ def add_coach():
 
 #------------------------------------------------------------------
 # deletes a coach
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/deletecoach', methods=['DELETE'])
 def delete_coach():
     cursor = db.get_db().cursor()
@@ -146,7 +156,6 @@ def delete_coach():
 
 #------------------------------------------------------------------
 # adds a game
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/addgame', methods=['POST'])
 def add_game():
     cursor = db.get_db().cursor()
@@ -164,7 +173,6 @@ def add_game():
 
 #------------------------------------------------------------------
 # deletes a game
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/deletegame', methods=['DELETE'])
 def delete_game():
     cursor = db.get_db().cursor()
