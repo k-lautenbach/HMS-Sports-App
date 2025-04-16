@@ -15,3 +15,8 @@ st.set_page_config(
 SideBarLinks()
 
 st.title("Welcome, Athletic Director!")
+
+# button to get athletic director contact info:
+AthDir_id = 101
+
+
