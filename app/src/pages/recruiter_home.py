@@ -35,25 +35,14 @@ top = st.columns([2, 2, 1])
 with top[0]:
     st.markdown("*Golden Bears D1 Basketball*")
 
-
 with top[0]:
     st.image("assets/recruiterpfp.jpeg", width=250)
-
 
 with top[1]:
     st.markdown("### Contact")
     st.text("Email: calgold@ucb.edu")
     st.text("Phone: 718-214-9182")
     
-mid = st.columns(3)
-
-with mid[0]:
-    st.subheader("Events")
-    st.markdown("""
-    - **East High**: March 1st, 2025 @ 5:30pm
-    
-    """)
-
 with top[1]:
     st.subheader("Recruitment Criteria")
     st.markdown("""

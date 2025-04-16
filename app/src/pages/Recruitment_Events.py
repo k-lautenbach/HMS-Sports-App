@@ -7,9 +7,9 @@ SideBarLinks()
 
 st.title("Manage Recruitment Schedule")
 
-
 # -----------------------------------------------
-if st.button("View Upcoming Events"):
+# Display recruiter's event schedule
+if st.button("View Upcoming Events 📅"):
         api_url = "http://web-api:4000/r/recruiter/events"
         try:
             response = requests.get(api_url)
@@ -27,11 +27,11 @@ if st.button("View Upcoming Events"):
         except Exception as e:
             st.error(f"Error connecting to API: {e}")
 
-
-
 api_url = "http://web-api:4000/r/recruiter/event"
 
-st.subheader("Add Recruiting Event")
+#-------------------------------------------------
+# add recruitment event
+st.subheader("Add Recruiting Event ➕")
 
 with st.form("add_events"):
     datetime = st.text_input("DateTime (YYYY-MM-DD HH:MM:SS)", placeholder="e.g., 2025-04-20 15:30:00")
@@ -59,8 +59,9 @@ with st.form("add_events"):
         except Exception as e:
             st.error(f"❗ Error connecting to API: {e}")
 
-
-st.subheader("Delete Recruiting Event")
+#-------------------------------------------------
+# delete recruitment event
+st.subheader("Delete Recruiting Event 🗑️")
 with st.form("delete_event"):
     eventid = st.text_input("EventID", placeholder="e.g., 1, 2, 3")
 

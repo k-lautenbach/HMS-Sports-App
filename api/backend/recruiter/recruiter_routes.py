@@ -98,6 +98,7 @@ def get_hs_teams_in_area():
     return jsonify(theData), 200
 
 #------------------------------------------------------------------
+# view a team's entire roster
 @recruiter.route('/recruiter/roster', methods=['GET'])
 def get_roster():
     cursor = db.get_db().cursor()
@@ -117,8 +118,6 @@ def get_roster():
 @recruiter.route('/recruiter/player_criteria', methods=['GET'])
 def player_criteria():
     cursor = db.get_db().cursor()
-    
-    # Get values from query parameters
     states = request.args.getlist('State')     
     gpa = request.args.get('GPA')    
     positions = request.args.getlist('Position') 
@@ -133,8 +132,7 @@ def player_criteria():
             JOIN Team t ON a.TeamID = t.TeamID
             WHERE a.Gender = 'Male' AND t.State IN %s AND a.GPA > %s AND a.Position IN %s
         '''
-
-    # Ensure states and positions are passed as tuples of values in the correct format for SQL
+    
     cursor.execute(query, (tuple(states), gpa, tuple(positions)))
     data = cursor.fetchall()
 
