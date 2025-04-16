@@ -17,9 +17,9 @@ info = {
     "Gender": "Male",
     "GPA": 3.9,
     "GradeLevel": "11",
-    "Height": "6'1\"",
+    "Height": "5'8\"",
     "Position": "Point Guard",
-    "RecruitmentStatus": "Active"
+    "RecruitmentStatus": "Actice"
 }
 
 col1, col2 = st.columns(2)
