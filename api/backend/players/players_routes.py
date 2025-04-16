@@ -41,23 +41,34 @@ def get_all_players():
     return jsonify(theData), 200
 #------------------------------------------------------------------
 @players.route('/players/<int:player_id>', methods=['GET'])
-def get_player_by_id(player_id):
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT PlayerID, FirstName, LastName, Gender, GPA, GradeLevel, Height,
-               Position, RecruitmentStatus, ContactID, TeamID
-        FROM Athlete
-        WHERE PlayerID = %s;
-    '''
-    cursor.execute(query, (player_id,))
-    result = cursor.fetchone()
+def get_player_info(player_id):
+    try:
+        cursor = db.get_db().cursor()
 
-    if result:
-        columns = [col[0] for col in cursor.description]
-        player_data = dict(zip(columns, result))
-        return jsonify(player_data), 200
-    else:
-        return jsonify({'error': 'Player not found'}), 404
+        query = '''
+            SELECT PlayerID, FirstName, LastName, Gender,
+                   GPA, GradeLevel, Height, Position,
+                   RecruitmentStatus, ContactID, TeamID
+            FROM Athlete
+            WHERE PlayerID = %s;
+        '''
+        cursor.execute(query, (player_id,))
+        
+        row = cursor.fetchone()  # ✅ first fetch the row
+
+        if row:
+            colnames = [desc[0] for desc in cursor.description]  # ✅ then get column names
+            result = dict(zip(colnames, row))
+            print("→ Returning player data:", result)
+            return jsonify(result), 200
+        else:
+            return jsonify({'error': 'Player not found'}), 404
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': 'Something went wrong', 'details': str(e)}), 500
+
 #------------------------------------------------------------------
 #gets all practices (for specific player)
 @players.route('/players/practices', methods=['GET'])

@@ -1,90 +1,63 @@
 import logging
-logger = logging.getLogger(__name__)
-
 import streamlit as st
 from modules.nav import SideBarLinks
 
+logger = logging.getLogger(__name__)
 st.set_page_config(layout='wide')
-
 SideBarLinks()
 
-st.title(f"Troy Bolton")
-st.write('')
-st.write("### Select Below")
-
-if st.button('Stats', 
-             type='primary', 
-             use_container_width=True):
-    st.switch_page('pages/02_Athlete_Stats.py')
-
-if st.button('Compare Colleges',
-             type='primary',
-             use_container_width=True):
-    st.switch_page('pages/03_Compare_Colleges.py')
-
-if st.button('Manage Schedule',
-             type='primary',
-             use_container_width=True):
-    st.switch_page('pages/04_Schedule_And_Events.py')
-
-st.markdown("---")
-st.subheader("My Profile")
-
-top = st.columns([2, 2, 1])
-
-with top[0]:
-    st.markdown("### Troy Bolton")
-    st.text("Team: East High Wildcats")
-    st.text("Age: 17")
-
-with top[1]:
-    st.image("assets/troyboltonpfp.jpeg", width=130)
-
-with top[2]:
-    st.markdown("### Athlete")
-    st.text("Contact: troybolton@easthigh.edu")
-    
-mid = st.columns(3)
-
-with mid[0]:
-    st.subheader("Schedule")
-    st.markdown("- Practice: Monday 4PM\n- Game: Fri 7PM\n- Recruiting Fair: Sat 2PM")
-
-with mid[1]:
-    st.subheader("Current Stats")
-    st.markdown("""
-    - **My Ranking**: #9  
-    - **PPG**: 23.1  
-    - **Team Record**: 20W - 5L
-    """)
-
-with mid[2]:
-    st.subheader("Highlights")
-    st.markdown("https://maxpreps.com/highlights/troybolton")
-
-# Troy Bolton Information
-
-import requests
-
+# Constants
 PLAYER_ID = 1
-API_URL = f"http://api:4000/a/players/{PLAYER_ID}"
 
-response = requests.get(API_URL)
-response.raise_for_status()
-info = response.json()
+st.title("Troy Bolton")
 
-st.subheader("Information")
+info = {
+    "FirstName": "Troy",
+    "LastName": "Bolton",
+    "Gender": "Male",
+    "GPA": 3.9,
+    "GradeLevel": "11",
+    "Height": "6'1\"",
+    "Position": "Point Guard",
+    "RecruitmentStatus": "Active"
+}
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown(f"**Name:** {info['FirstName']} {info['LastName']}")
-    st.markdown(f"**GPA:** {info['GPA']}")
-    st.markdown(f"**Grade Level:** {info['GradeLevel']}")
-    st.markdown(f"**Height:** {info['Height']}")
+    st.header("Stats")
+    st.markdown("Track and update your on-court performance.")
+    if st.button("View / Update Stats"):
+        st.switch_page("pages/02_Athlete_Stats.py")
 
 with col2:
+    st.header("Schedule")
+    st.markdown("Keep up with games, practices, and recruiting events.")
+    if st.button("View Schedule"):
+        st.switch_page("pages/04_Schedule.py")
+
+st.markdown("---")
+
+st.subheader("Profile")
+
+profile_col1, profile_col2 = st.columns([3, 1])
+
+with profile_col1:
+    st.markdown(f"**Name:** {info['FirstName']} {info['LastName']}")
+    st.markdown(f"**Gender:** {info['Gender']}")
+    st.markdown(f"**GPA:** {info['GPA']}")
+    st.markdown(f"**Grade Level:** {info['GradeLevel']}")
+    st.markdown(f"**Height:** {info['Height']} ft")
     st.markdown(f"**Position:** {info['Position']}")
     st.markdown(f"**Recruitment Status:** {info['RecruitmentStatus']}")
-    st.markdown(f"**Gender:** {info['Gender']}")
-    st.markdown(f"**Team ID:** {info['TeamID']}")
+
+with profile_col2:
+    st.image("assets/troyboltonpfp.jpeg", width=500)
+
+st.markdown("---")
+
+# Compare Schools
+st.header("Compare Schools")
+st.markdown("Find your best fit")
+if st.button("Compare Now"):
+    st.switch_page("pages/Compare_Collges.py")
