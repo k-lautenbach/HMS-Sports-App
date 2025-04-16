@@ -7,6 +7,7 @@ from backend.simple.simple_routes import simple_routes
 from backend.teams.teams_routes import teams
 from backend.athletic_director.athletic_director_routes import athletic_director
 from backend.players.players_routes import players
+from backend.recruiter.recruiter_routes import recruiter
 
 import os
 from dotenv import load_dotenv
@@ -47,6 +48,7 @@ def create_app():
     app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(players,    url_prefix='/a')
     app.register_blueprint(athletic_director,    url_prefix='/d')
+    app.register_blueprint(recruiter, url_prefix='/r')
     app.register_blueprint(teams, url_prefix='/t')
 
     # Don't forget to return the app object

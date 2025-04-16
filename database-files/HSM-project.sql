@@ -692,7 +692,7 @@ INSERT INTO Athlete (PlayerID, FirstName, LastName, Gender, GPA, GradeLevel, Hei
 
 
 INSERT INTO AthleteStats (StatsID, PlayerID, TotalPoints, GamesPlayed, AssistsPerGame, Rebounds, PointsPerGame, FreeThrowPercentage, HighlightsURL) VALUES
-(1, 1, 350, 21, 6.2, 75, 23.1, 0.67, 'https://maxpreps.com/highlights/troybolton'),
+(1, 1, 350, 21, 6.2, 75, 23.1, 0.67, 'https://youtu.be/A_QRHJoXXYw?si=9Wy73fo9khxxaTez'),
 (2, 2, 267, 20, 4.3, 82, 18.7, 0.52, 'https://maxpreps.com/highlights/chaddanforth'),
 (3, 3, 312, 22, 3.9, 90, 20.5, 0.61, 'https://maxpreps.com/highlights/zekebaylor'),
 (4, 4, 305, 20, 5.1, 60, 20.3, 0.70, 'https://maxpreps.com/highlights/gabriellamontez'),

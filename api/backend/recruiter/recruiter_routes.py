@@ -7,6 +7,8 @@ from flask import jsonify
 from flask import make_response
 from flask import current_app
 from backend.db_connection import db
+
+
 #----------------------------------------------------------
 # adds a recruiting event
 recruiter = Blueprint('recruiter', __name__)
@@ -42,20 +44,28 @@ def delete_recruiter_event():
     db.get_db().commit()
     return jsonify({'message': f'Successfully removed {event_id} from recruiter {recruiter_id}\'s events'}), 200
 
+
 #------------------------------------------------------------------
-# gets all players of a certain position
-@recruiter.route('/recruiter/playerposition', methods=['GET'])
-def get_all_players(Position):
+# gets a player's stats given first and last name
+@recruiter.route('/recruiter/player_stats', methods=['GET'])
+def get_player_stats():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT Athlete.PlayerID, Athlete.FirstName, Athlete.LastName, Athlete.Gender, Athlete.GPA, Athlete.GradeLevel, Athlete.Height, Athlete.Position, Athlete.RecruitmentStatus, Athlete.ContactID, Athlete.TeamID
-        FROM Athlete
-        WHERE Position = %s;
+        SELECT a.FirstName, a.LastName, a.Position, a.GradeLevel, a.Height,
+               s.TotalPoints, s.GamesPlayed, s.AssistsPerGame, s.Rebounds,
+               s.PointsPerGame, s.FreeThrowPercentage, s.HighlightsURL,
+               t.TeamName
+        FROM Athlete a 
+        JOIN AthleteStats s ON a.PlayerID = s.PlayerID
+        JOIN Team t ON a.TeamID = t.TeamID
+        WHERE a.FirstName = %s AND a.LastName = %s
     '''
-    cursor.execute(query)
+    first_name = request.args.get('first_name')
+    last_name = request.args.get('last_name')
+    
+    cursor.execute(query, (first_name, last_name))
     theData = cursor.fetchall()
     return jsonify(theData), 200
-
 #------------------------------------------------------------------
 # gets all teams in a certain state
 @recruiter.route('/recruiter/state_teams', methods=['GET'])
@@ -64,7 +74,7 @@ def get_hs_teams_in_area():
     query = '''
         SELECT *
         FROM Team
-        WHERE State = %s
+        WHERE State = %s and Sport = 'Basketball'
     '''
     state = request.args.get('state')
     cursor.execute(query, (state,))
@@ -72,17 +82,17 @@ def get_hs_teams_in_area():
     return jsonify(theData), 200
 
 #------------------------------------------------------------------
-# gets all athletes on one team and compares their stats
-@recruiter.route('/recruiter/compare', methods=['GET'])
-def compare_stats():
+@recruiter.route('/recruiter/roster', methods=['GET'])
+def get_roster():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT *
-        FROM Athlete JOIN AthleteStats ON Athlete.PlayerID = AthleteStats.PlayerID
-        WHERE Athlete.TeamID = %s
+        SELECT a.PlayerID, a.FirstName, a.LastName, a.Gender, a.Height, a.GradeLevel, a.Position, a.RecruitmentStatus, a.ContactID, a.GPA
+        FROM Team t JOIN Athlete a
+        ON t.TeamID = a.TeamID
+        WHERE t.TeamName = %s
     '''
-    team = request.args.get('TeamID')
-    cursor.execute(query,(team,) )
+    team = request.args.get('team')
+    cursor.execute(query, (team,))
     theData = cursor.fetchall()
     return jsonify(theData), 200
 

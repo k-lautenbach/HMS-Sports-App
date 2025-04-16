@@ -67,7 +67,8 @@ if st.button('Act as Calvin Goldstein, UCB Recruiter',
     st.session_state['authenticated'] = True
     st.session_state['role'] = 'Athlete'
     st.session_state['first_name'] = 'Cal'
-    st.switch_page('pages/recruiter_home.py')
+    st.switch_page('pages/Recruiter_Home.py')
+
 if st.button("Act as Ethan Wilson, East High's Athletic Director", 
             type = 'primary', 
             use_container_width=True):
