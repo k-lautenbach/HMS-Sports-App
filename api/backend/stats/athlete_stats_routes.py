@@ -1,122 +1,100 @@
-########################################################
-# Athlete Stats Blueprint of Endpoints
-########################################################
-from flask import Blueprint, request, jsonify
+from flask import Blueprint
+from flask import request
+from flask import jsonify
+from flask import make_response
+from flask import current_app
 from backend.db_connection import db
 
-athlete_stats_bp = Blueprint('athlete_stats', __name__)
+athletestats = Blueprint('athletestats', __name__)
 
-#------------------------------------------------------------------
-# GET single player's stats
-@athlete_stats_bp.route('/s/athletestats/<int:player_id>', methods=['GET'])
-def get_athlete_stats(player_id):
+# ------------------------------------------------------------
+# get all stats of athlete
+@athletestats.route('/athletestats', methods=['GET'])
+def get_all_stats():
+    query = '''
+        SELECT StatsID, PlayerID, TotalPoints, GamesPlayed,
+               AssistsPerGame, Rebounds, PointsPerGame,
+               FreeThrowPercentage, HighlightsURL
+        FROM AthleteStats
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query)
+    theData = cursor.fetchall()
+    return make_response(jsonify(theData), 200)
+
+# ------------------------------------------------------------
+# get specific athlete stats
+@athletestats.route('/athletestats/<int:stats_id>', methods=['GET'])
+def get_specific_stats(stats_id):
+    query = '''
+        SELECT StatsID, PlayerID, TotalPoints, GamesPlayed,
+               AssistsPerGame, Rebounds, PointsPerGame,
+               FreeThrowPercentage, HighlightsURL
+        FROM AthleteStats
+        WHERE StatsID = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (stats_id,))
+    theData = cursor.fetchone()
+
+    if theData:
+        return make_response(jsonify(theData), 200)
+# ------------------------------------------------------------
+# Updating specific athlete stats
+@athletestats.route('/athletestats/<int:stats_id>', methods=['PUT'])
+def update_athlete_stats(stats_id):
+    theData = request.json
+    query = '''
+        UPDATE AthleteStats
+        SET TotalPoints = %s,
+            GamesPlayed = %s,
+            AssistsPerGame = %s,
+            Rebounds = %s,
+            PointsPerGame = %s,
+            FreeThrowPercentage = %s,
+            HighlightsURL = %s
+        WHERE StatsID = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (
+        theData['TotalPoints'],
+        theData['GamesPlayed'],
+        theData['AssistsPerGame'],
+        theData['Rebounds'],
+        theData['PointsPerGame'],
+        theData['FreeThrowPercentage'],
+        theData['HighlightsURL'],
+        stats_id
+    ))
+    db.get_db().commit()
+    return make_response("Updated", 200)
+
+# ------------------------------------------------------------
+# Add new stats to athlete
+@athletestats.route('/athletestats', methods=['POST'])
+def add_new_athlete_stats():
     try:
-        cursor = db.get_db().cursor()
-        query = '''
-            SELECT *
-            FROM AthleteStats
-            WHERE PlayerID = %s;
-        '''
-        cursor.execute(query, (player_id,))
-        row = cursor.fetchone()
-
-        if row:
-            colnames = [desc[0] for desc in cursor.description]
-            result = dict(zip(colnames, row))
-            return jsonify(result), 200
-        else:
-            return jsonify({'message': 'No stats found for this player'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-#------------------------------------------------------------------
-# PUT update stats for a player
-@athlete_stats_bp.route('/s/athletestats/<int:player_id>', methods=['PUT'])
-def update_athlete_stats(player_id):
-    try:
-        cursor = db.get_db().cursor()
-        data = request.get_json()
-
-        query = '''
-            UPDATE AthleteStats 
-            SET TotalPoints = %s,
-                GamesPlayed = %s,
-                AssistsPerGame = %s,
-                Rebounds = %s,
-                PointsPerGame = %s,
-                FreeThrowPercentage = %s,
-                HighlightsURL = %s
-            WHERE PlayerID = %s;
-        '''
-        cursor.execute(query, (
-            data.get('TotalPoints'),
-            data.get('GamesPlayed'),
-            data.get('AssistsPerGame'),
-            data.get('Rebounds'),
-            data.get('PointsPerGame'),
-            data.get('FreeThrowPercentage'),
-            data.get('HighlightsURL'),
-            player_id
-        ))
-
-        if cursor.rowcount == 0:
-            return jsonify({'message': 'No stats found for this player'}), 404
-
-        db.get_db().commit()
-        return jsonify({'message': 'Stats updated successfully'}), 200
-    except Exception as e:
-        db.get_db().rollback()
-        return jsonify({'error': str(e)}), 500
-
-#------------------------------------------------------------------
-# POST create new stats
-@athlete_stats_bp.route('/s/athletestats', methods=['POST'])
-def create_athlete_stats():
-    try:
-        cursor = db.get_db().cursor()
-        data = request.get_json()
-
+        theData = request.json
         query = '''
             INSERT INTO AthleteStats 
-            (PlayerID, TotalPoints, GamesPlayed, AssistsPerGame, Rebounds, 
-             PointsPerGame, FreeThrowPercentage, HighlightsURL)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+            (PlayerID, TotalPoints, GamesPlayed, AssistsPerGame,
+             Rebounds, PointsPerGame, FreeThrowPercentage, HighlightsURL)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         '''
-        cursor.execute(query, (
-            data.get('PlayerID'),
-            data.get('TotalPoints'),
-            data.get('GamesPlayed'),
-            data.get('AssistsPerGame'),
-            data.get('Rebounds'),
-            data.get('PointsPerGame'),
-            data.get('FreeThrowPercentage'),
-            data.get('HighlightsURL')
-        ))
-
-        db.get_db().commit()
-        return jsonify({'message': 'Stats created successfully'}), 201
-    except Exception as e:
-        db.get_db().rollback()
-        return jsonify({'error': str(e)}), 500
-
-#------------------------------------------------------------------
-# DELETE stats for a player
-@athlete_stats_bp.route('/s/athletestats/<int:player_id>', methods=['DELETE'])
-def delete_athlete_stats(player_id):
-    try:
         cursor = db.get_db().cursor()
-
-        query = '''
-            DELETE FROM AthleteStats
-            WHERE PlayerID = %s;
-        '''
-        cursor.execute(query, (player_id,))
-
-        if cursor.rowcount == 0:
-            return jsonify({'message': 'No stats found for this player'}), 404
-
+        cursor.execute(query, (
+            theData['PlayerID'],
+            theData['TotalPoints'],
+            theData['GamesPlayed'],
+            theData['AssistsPerGame'],
+            theData['Rebounds'],
+            theData['PointsPerGame'],
+            theData['FreeThrowPercentage'],
+            theData['HighlightsURL']
+        ))
         db.get_db().commit()
-        return jsonify({'message': 'Stats deleted successfully'}), 200
+        return make_response("Added New stats", 200)
+
     except Exception as e:
-        db.get_db().rollback()
-        return jsonify({'error': str(e)}), 500
+        current_app.logger.error(f"POST /athletestats error: {e}")
+        return jsonify({"error": str(e)}), 500
