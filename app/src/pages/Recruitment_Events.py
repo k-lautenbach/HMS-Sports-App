@@ -35,7 +35,7 @@ st.subheader("Add Recruiting Event ➕")
 
 with st.form("add_events"):
     datetime = st.text_input("DateTime (YYYY-MM-DD HH:MM:SS)", placeholder="e.g., 2025-04-20 15:30:00")
-    location = st.text_input("Location", placeholder="e.g., Boston, MA")
+    location = st.text_input("High School", placeholder="e.g., East High")
 
     submitted = st.form_submit_button("Add Event")
 

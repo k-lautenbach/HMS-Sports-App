@@ -1,9 +1,6 @@
 # Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
 
-# This file has function to add certain functionality to the left side bar of the app
-
 import streamlit as st
-
 
 #### ------------------------ General ------------------------
 def HomeNav():
@@ -11,7 +8,7 @@ def HomeNav():
 
 
 def AboutPageNav():
-    st.sidebar.page_link("pages/30_About.py", label="About", icon="❓")
+    st.sidebar.page_link("pages/About.py", label="About", icon="❓")
 
 
 #### ------------------------ Role of Athletic Director ------------------------
@@ -19,16 +16,6 @@ def AthleticDirectorHomeNav():
     st.sidebar.page_link(
         "pages/Athletic_Director_Home.py", label="Athletic Director Home", icon="🧍‍♂️"
     )
-
-# EXAMPLE for link (edit/remove)
-def WorldBankVizNav():
-    st.sidebar.page_link(
-        "pages/01_World_Bank_Viz.py", label="World Bank Visualization", icon="🏦"
-    )
-
-# EXAMPLE for link (edit/remove)
-def MapDemoNav():
-    st.sidebar.page_link("pages/02_Map_Demo.py", label="Map Demonstration", icon="🗺️")
 
 
 ## ------------------------ Role of Coach ------------------------
@@ -61,9 +48,6 @@ def RecruiterHomeNav():
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
-    """
-    This function handles adding links to the sidebar of the app based upon the logged-in user's role, which was put in the streamlit session_state object when logging in.
-    """
 
     # add a logo to the sidebar always
     st.sidebar.image("assets/bfa.logo.png", width=150)
@@ -71,7 +55,7 @@ def SideBarLinks(show_home=False):
     # If there is no logged in user, redirect to the Home (Landing) page
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
-        st.switch_page("Home.py")
+        st.switch_page("Home.py")    
 
     if show_home:
         # Show the Home page link (the landing page)
