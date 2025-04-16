@@ -64,7 +64,7 @@ if st.button("View Team Roster"):
                     df = pd.DataFrame(data)
                     
                     column_order = ['PlayerID', 'FirstName', 'LastName', 'Gender', 'GradeLevel', 
-                                   'GPA', 'Height', 'Position', 'RecruitmentStatus', 'ContactID']
+                                   'GPA', 'Height', 'Position', 'RecruitmentStatus']
                     
                     df = df[[col for col in column_order if col in df.columns]]
                     

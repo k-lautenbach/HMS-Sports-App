@@ -85,7 +85,7 @@ def get_hs_teams_in_area():
 def get_roster():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT a.PlayerID, a.FirstName, a.LastName, a.Gender, a.Height, a.GradeLevel, a.Position, a.RecruitmentStatus, a.ContactID, a.GPA
+        SELECT a.PlayerID, a.FirstName, a.LastName, a.Gender, a.Height, a.GradeLevel, a.Position, a.RecruitmentStatus, a.GPA
         FROM Team t JOIN Athlete a
         ON t.TeamID = a.TeamID
         WHERE t.TeamName = %s
@@ -95,21 +95,6 @@ def get_roster():
     theData = cursor.fetchall()
     return jsonify(theData), 200
 
-#------------------------------------------------------------------
-# gets athlete contact info
-@recruiter.route('/athlete/contact', methods=['GET'])
-def get_athlete_contact():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT *
-        FROM Athlete a JOIN Contact c
-        ON a.ContactID = c.ContactID
-        WHERE a.PlayerID = %s
-    '''
-    playerid = request.args.get('PlayerID')
-    cursor.execute(query,(playerid,) )
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
 #------------------------------------------------------------------
 # shows athletes who match given criteria of gpa, state, and position
 @recruiter.route('/recruiter/player_criteria', methods=['GET'])

@@ -54,7 +54,7 @@ if st.button("Get Players"):
                     df = pd.DataFrame(data)
                     st.success(f"Found {len(df)} players matching your criteria.")
                     column_order = ['PlayerID', 'FirstName', 'LastName', 'GradeLevel', 
-                                    'GPA', 'Position', 'RecruitmentStatus', 'ContactID']
+                                    'GPA', 'Position', 'RecruitmentStatus']
                     
                     df = df[[col for col in column_order if col in df.columns]]
                     st.dataframe(df)
