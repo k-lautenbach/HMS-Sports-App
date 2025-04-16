@@ -9,20 +9,34 @@ from flask import current_app
 from backend.db_connection import db
 
 
+recruiter = Blueprint('recruiter', __name__)
+#------------------------------------------------------------------
+# fetch all of recruiters events
+@recruiter.route('/recruiter/events', methods=['GET'])
+def view_events():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT re.DateTime, re.Location, re.EventID
+        FROM RecruitingEvents re
+        WHERE re.RecruiterID = 301
+    '''
+    cursor.execute(query)
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
+
 #----------------------------------------------------------
 # adds a recruiting event
-recruiter = Blueprint('recruiter', __name__)
 @recruiter.route('/recruiter/event', methods=['POST'])
-def add_game():
+def add_events():
     cursor = db.get_db().cursor()
     data = request.get_json()
     query = '''
-        INSERT INTO RecrutingEvents (
-            DateTime, Location, RecruiterID, EventID
+        INSERT INTO RecruitingEvents (
+            DateTime, Location, RecruiterID
         ) 
-        VALUES (%s, %s, %s, %s)
+        VALUES (%s, %s, %s)
     '''
-    values = (data.get('DateTime'), data.get('Location'), data.get('RecruiterID'), data.get('EventID'), data.get('HomeTeamID'), data.get('AwayTeamID'), data.get('DirectorID'))
+    values = (data.get('DateTime'), data.get('Location'), 301)
     cursor.execute(query, values)
     db.get_db().commit()
     return jsonify({'message':'Event added successfully'}), 200
@@ -30,19 +44,22 @@ def add_game():
 #------------------------------------------------------------------
 #removes a recruiting event 
 @recruiter.route('/recruiter/event', methods=['DELETE'])
-def delete_recruiter_event():
+def delete_event():
     cursor = db.get_db().cursor()
-    recruiter_id = request.args.get('RecruiterID')
     event_id = request.args.get('EventID')
-    if not recruiter_id or not event_id:
-        return jsonify({'error': 'Missing recruiter_id or event_id'}), 400
+
+    if not event_id:
+        return jsonify({'error': 'Missing event_id'}), 400
+
     query = '''
         DELETE FROM RecruitingEvents
-        WHERE RecruiterID = %s AND EventID = %s;
+        WHERE RecruiterID = 301 AND EventID = %s;
     '''
-    cursor.execute(query, (recruiter_id, event_id))
+
+    cursor.execute(query, (event_id,))
     db.get_db().commit()
-    return jsonify({'message': f'Successfully removed {event_id} from recruiter {recruiter_id}\'s events'}), 200
+
+    return jsonify({'message': f'Successfully cancelled event {event_id}!'}), 200
 
 #------------------------------------------------------------------
 # gets player stats based on their first and last name

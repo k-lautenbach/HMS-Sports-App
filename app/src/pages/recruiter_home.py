@@ -25,7 +25,7 @@ if st.button('Recommended Athletes',
 if st.button('Manage Event Schedules',
              type='primary',
              use_container_width=True):
-    st.switch_page('pages/04_Schedule_And_Events.py')
+    st.switch_page('pages/Recruitment_Events.py')
 
 st.markdown("---")
 st.subheader("Cal Goldstein")

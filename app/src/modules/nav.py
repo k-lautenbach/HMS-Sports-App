@@ -55,6 +55,9 @@ def RecruiterHomeNav():
      st.sidebar.page_link(
         "pages/Recruitment_Tool.py", label="Recruitment Tool", icon = "🛠️"
      )
+     st.sidebar.page_link(
+        "pages/Recruitment_Events.py", label="Recruitment Events", icon = "📅"
+     )
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):

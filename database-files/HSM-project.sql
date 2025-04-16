@@ -11,7 +11,7 @@ CREATE TABLE Coach (
 
 CREATE TABLE AthleticDirector (
     DirectorID INT PRIMARY KEY,
-    FirstName VARCHARdocker(50),
+    FirstName VARCHAR (50),
     LastName VARCHAR(50),
     YearsExperience INT
 );
@@ -56,7 +56,7 @@ CREATE TABLE Recruiter (
 );
 
 CREATE TABLE RecruitingEvents (
-    EventID INT PRIMARY KEY,
+    EventID INT AUTO_INCREMENT PRIMARY KEY,
     DateTime DATETIME,
     Location VARCHAR(100),
     RecruiterID INT,
@@ -377,16 +377,16 @@ INSERT INTO Recruiter (RecruiterID, FirstName, LastName, University, TeamID) VAL
 (339, 'Zara', 'Gray', 'Syracuse University', 1037),
 (340, 'Anthony', 'Jenkins', 'Wake Forest', 1038);
 
-INSERT INTO RecruitingEvents (EventID, DateTime, Location, RecruiterID) VALUES
-(1, '2025-03-01 17:30:00', 'East High', 301),
-(2, '2025-03-02 18:30:00', 'North High', 301),
-(3, '2025-03-03 17:45:00', 'Central High', 301),
-(4, '2025-03-04 18:00:00', 'West High', 301),
-(5, '2025-03-05 18:15:00', 'South High', 305),
-(6, '2025-03-06 17:30:00', 'Liberty High', 306),
-(7, '2025-03-07 18:45:00', 'River Ridge High', 307),
-(8, '2025-03-08 17:00:00', 'Maplewood High', 308),
-(9, '2025-03-09 18:00:00', 'Oceanview High', 309)
+INSERT INTO RecruitingEvents (DateTime, Location, RecruiterID) VALUES
+('2025-03-01 17:30:00', 'East High', 301),
+('2025-03-02 18:30:00', 'North High', 301),
+('2025-03-03 17:45:00', 'Central High', 301),
+('2025-03-04 18:00:00', 'West High', 301),
+('2025-03-05 18:15:00', 'South High', 305),
+('2025-03-06 17:30:00', 'Liberty High', 306),
+('2025-03-07 18:45:00', 'River Ridge High', 307),
+('2025-03-08 17:00:00', 'Maplewood High', 308),
+('2025-03-09 18:00:00', 'Oceanview High', 309)
 ;
 
 
