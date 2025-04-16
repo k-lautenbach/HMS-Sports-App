@@ -23,8 +23,23 @@ def get_schools_interest():
     '''
     player_id = request.args.get('player_id')
     cursor.execute(query, (player_id,))
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
+    rows = cursor.fetchall()
+    colnames = [desc[0] for desc in cursor.description]
+
+    # Convert each row to dict, converting any timedelta/datetime fields
+    results = []
+    for row in rows:
+        row_dict = {}
+        for col, val in zip(colnames, row):
+            if hasattr(val, 'isoformat'):
+                row_dict[col] = val.isoformat()
+            elif isinstance(val, (int, float, str, type(None))):
+                row_dict[col] = val
+            else:
+                row_dict[col] = str(val)  # fallback for timedelta, etc.
+        results.append(row_dict)
+
+    return jsonify(results), 200
 
 
 #------------------------------------------------------------------
