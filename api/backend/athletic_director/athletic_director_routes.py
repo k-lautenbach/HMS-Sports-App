@@ -8,26 +8,33 @@ from flask import jsonify
 from flask import make_response
 from flask import current_app
 from backend.db_connection import db
-
+athletic_director = Blueprint('athletic_director', __name__)
 #------------------------------------------------------------------
 #gets teams in the athletic program at their school
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/teams', methods=['GET'])
 def get_teams():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT Team.TeamName, Coach.First, Coach.Last, Team.HighSchoolName
-        FROM Team
-        JOIN Coach ON Team.CoachID = Coach.CoachID
-        JOIN Contact ON Coach.ContactID = Contact.ContactID
-        WHERE Team.HighSchoolName = %s
-    '''
-    high_school = request.args.get('high_school')
-    cursor.execute(query, (high_school))
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
+    try:
+        cursor = db.get_db().cursor()
+        high_school = request.args.get('high_school')
+
+        query = '''
+            SELECT Team.TeamName, Coach.First, Coach.Last, Team.HighSchoolName
+            FROM Team
+            LEFT JOIN Coach ON Team.CoachID = Coach.CoachID
+            LEFT JOIN Contact ON Coach.ContactID = Contact.ContactID
+            WHERE Team.HighSchoolName = %s
+        '''
+        cursor.execute(query, (high_school,))
+        theData = cursor.fetchall()
+        print("✅ Fetched team data successfully")
+        return jsonify(theData), 200
+
+    except Exception as e:
+        print(f"🔥 ERROR in /athletic_director/teams route: {e}")
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 #------------------------------------------------------------------
 #gets coaches and their contacts in the athletic program at their school
+
 @athletic_director.route('/athletic_director/coaches', methods=['GET'])
 def get_players():
     cursor = db.get_db().cursor()

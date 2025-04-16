@@ -47,7 +47,7 @@ with prof_layout[0]:
 
 mid = st.columns(3)
 school_name = 'East High'
-base_url = 'http://api:4000/d/teams'
+api_url = 'http://api:4000/d/athletic_director/teams'
 params = {'high_school': school_name}
 response = requests.get(base_url, params=params)
 
