@@ -15,12 +15,12 @@ st.write("### What would you like to do today?")
 if st.button('Player Recruitment Tool', 
              type='primary', 
              use_container_width=True):
-    st.switch_page('pages/Recruitement_Tool.py')
+    st.switch_page('pages/Recruitment_Tool.py')
 
 if st.button('Recommended Athletes',
              type='primary',
              use_container_width=True):
-    st.switch_page('pages/03_Compare_Colleges.py')
+    st.switch_page('pages/Recruiter_AthleteRecs.py')
 
 if st.button('Manage Event Schedules',
              type='primary',

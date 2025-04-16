@@ -44,9 +44,8 @@ def delete_recruiter_event():
     db.get_db().commit()
     return jsonify({'message': f'Successfully removed {event_id} from recruiter {recruiter_id}\'s events'}), 200
 
-
 #------------------------------------------------------------------
-# gets a player's stats given first and last name
+# gets player stats based on their first and last name
 @recruiter.route('/recruiter/player_stats', methods=['GET'])
 def get_player_stats():
     cursor = db.get_db().cursor()
@@ -111,3 +110,30 @@ def get_athlete_contact():
     cursor.execute(query,(playerid,) )
     theData = cursor.fetchall()
     return jsonify(theData), 200
+#------------------------------------------------------------------
+# shows athletes who match given criteria of gpa, state, and position
+@recruiter.route('/recruiter/player_criteria', methods=['GET'])
+def player_criteria():
+    cursor = db.get_db().cursor()
+    
+    # Get values from query parameters
+    states = request.args.getlist('State')     
+    gpa = request.args.get('GPA')    
+    positions = request.args.getlist('Position') 
+    
+    state_str = ', '.join([f"'{state_item}'" for state_item in states])
+    position_str = ', '.join([f"'{pos_item}'" for pos_item in positions])
+
+    query = '''
+            SELECT a.FirstName, a.LastName, a.Position, a.GradeLevel, a.Height,
+                   t.TeamName, t.State, a.GPA, a.RecruitmentStatus
+            FROM Athlete a 
+            JOIN Team t ON a.TeamID = t.TeamID
+            WHERE a.Gender = 'Male' AND t.State IN %s AND a.GPA > %s AND a.Position IN %s
+        '''
+
+    # Ensure states and positions are passed as tuples of values in the correct format for SQL
+    cursor.execute(query, (tuple(states), gpa, tuple(positions)))
+    data = cursor.fetchall()
+
+    return jsonify(data), 200

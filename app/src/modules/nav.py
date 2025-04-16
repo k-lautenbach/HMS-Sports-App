@@ -49,6 +49,12 @@ def RecruiterHomeNav():
      st.sidebar.page_link(
         "pages/Recruiter_Home.py", label="Recruiter Home", icon="🧑‍💻"
     )
+     st.sidebar.page_link(
+         "pages/Recruiter_AthleteRecs.py", label="Recommended Athletes", icon = "🏃‍♂️"
+     )
+     st.sidebar.page_link(
+        "pages/Recruitment_Tool.py", label="Recruitment Tool", icon = "🛠️"
+     )
 
 # --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
