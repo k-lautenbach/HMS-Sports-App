@@ -83,8 +83,6 @@ def SideBarLinks(show_home=False):
         # if the user role is an athletic director, give them acces to the AD page
         if st.session_state["role"] == "athletic_director":
             AthleticDirectorHomeNav()
-            EXAMPLE: WorldBankVizNav()
-            EXAMPLE: MapDemoNav()
 
         # If the user role is coach, give them access to the coach page
         if st.session_state["role"] == "coach":

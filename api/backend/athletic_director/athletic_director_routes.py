@@ -8,25 +8,41 @@ from flask import jsonify
 from flask import make_response
 from flask import current_app
 from backend.db_connection import db
+
 #------------------------------------------------------------------
-#gets all of the schools a player has saved (for recruitment)
+#gets teams in the athletic program at their school
 athletic_director = Blueprint('athletic_director', __name__)
-@athletic_director.route('/athletic_director/coaches', methods=['GET'])
-def get_coaches():
+@athletic_director.route('/athletic_director/teams', methods=['GET'])
+def get_teams():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT Coach.FirstName, Coach.Last, Contact.Phone, Contact.Email
-        FROM Coach
+        SELECT Team.TeamName, Coach.First, Coach.Last, Team.HighSchoolName
+        FROM Team
+        JOIN Coach ON Team.CoachID = Coach.CoachID
         JOIN Contact ON Coach.ContactID = Contact.ContactID
-        WHERE Coach.CoachID IN (
-            SELECT CoachID FROM Team WHERE HighSchoolName = %s);
-        )
+        WHERE Team.HighSchoolName = %s
+    '''
+    high_school = request.args.get('high_school')
+    cursor.execute(query, (high_school),)
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
+#------------------------------------------------------------------
+#gets coaches and their contacts in the athletic program at their school
+athletic_director = Blueprint('athletic_director', __name__)
+@athletic_director.route('/athletic_director/coaches', methods=['GET'])
+def get_players():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT Athlete.PlayerID, Athlete.FirstName, Athlete.LastName, Athlete.TeamID, Team.TeamID, Team.TeamName
+        FROM Athlete
+        JOIN Team
+        WHERE Athlete.TeamID IN (
+            SELECT Team.TeamID FROM Team WHERE Team.HighSchoolName = %s);
     '''
     high_school_team = request.args.get('team_id')
     cursor.execute(query, (high_school_team),)
     theData = cursor.fetchall()
     return jsonify(theData), 200
-
 #------------------------------------------------------------------
 #gets all practices
 athletic_director = Blueprint('athletic_director', __name__)
@@ -34,12 +50,12 @@ athletic_director = Blueprint('athletic_director', __name__)
 def get_practices():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT Data, Time, Location
+        SELECT Date, Time, Location
         FROM Practice
         WHERE TeamID = %s
     '''
     high_school_team = request.args.get('team_id')
-    cursor.execute(query, (high_school_team),)
+    cursor.execute(query, (high_school_team))
     theData = cursor.fetchall()
     return jsonify(theData), 200
 
