@@ -21,7 +21,6 @@ def get_teams():
             SELECT Team.TeamName, Coach.First, Coach.Last, Team.HighSchoolName
             FROM Team
             LEFT JOIN Coach ON Team.CoachID = Coach.CoachID
-            LEFT JOIN Contact ON Coach.ContactID = Contact.ContactID
             WHERE Team.HighSchoolName = %s
         '''
         cursor.execute(query, (high_school,))
@@ -41,7 +40,7 @@ def get_players():
     query = '''
         SELECT Athlete.PlayerID, Athlete.FirstName, Athlete.LastName, Athlete.TeamID, Team.TeamID, Team.TeamName
         FROM Athlete
-        JOIN Team
+        JOIN Team ON Athlete.TeamID = Team.TeamID
         WHERE Athlete.TeamID IN (
             SELECT Team.TeamID FROM Team WHERE Team.HighSchoolName = %s);
     '''
@@ -55,12 +54,8 @@ def get_players():
 def get_coaches():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT Coach.FirstName, Coach.Last, Contact.Phone, Contact.Email
+        SELECT Coach.FirstName, Coach.Last
         FROM Coach
-        JOIN Contact ON Coach.ContactID = Contact.ContactID
-        WHERE Coach.CoachID IN (
-            SELECT CoachID FROM Team WHERE HighSchoolName = %s);
-        )
     '''
     high_school_team = request.args.get('team_id')
     cursor.execute(query, (high_school_team),)
@@ -136,11 +131,11 @@ def add_coach():
     data = request.get_json()
     query = '''
         INSERT INTO Coach (
-            CoachID, FirstName, LastName, ContactID
+            CoachID, FirstName, LastName
         ) 
-        VALUES (%s, %s, %s, %s)
+        VALUES (%s, %s, %s)
     '''
-    values = (data.get('CoachID'), data.get('FirstName'), data.get('LastName'), data.get('ContactID'))
+    values = (data.get('CoachID'), data.get('FirstName'), data.get('LastName'))
     cursor.execute(query, values)
     db.get_db().commit()
     return jsonify({'message':'Coach added successfully'}), 200
