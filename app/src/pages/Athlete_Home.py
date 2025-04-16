@@ -62,11 +62,14 @@ with mid[2]:
     st.subheader("Highlights")
     st.markdown("https://maxpreps.com/highlights/troybolton")
 
-# Athlete
-import requests
-PLAYER_ID = 1
+# Troy Bolton Information
 
-response = requests.get(f"http://api:4000/a/players/{PLAYER_ID}")
+import requests
+
+PLAYER_ID = 1
+API_URL = f"http://api:4000/a/players/{PLAYER_ID}"
+
+response = requests.get(API_URL)
 response.raise_for_status()
 info = response.json()
 
@@ -75,6 +78,7 @@ st.subheader("Information")
 col1, col2 = st.columns(2)
 
 with col1:
+    st.markdown(f"**Name:** {info['FirstName']} {info['LastName']}")
     st.markdown(f"**GPA:** {info['GPA']}")
     st.markdown(f"**Grade Level:** {info['GradeLevel']}")
     st.markdown(f"**Height:** {info['Height']}")
@@ -82,3 +86,5 @@ with col1:
 with col2:
     st.markdown(f"**Position:** {info['Position']}")
     st.markdown(f"**Recruitment Status:** {info['RecruitmentStatus']}")
+    st.markdown(f"**Gender:** {info['Gender']}")
+    st.markdown(f"**Team ID:** {info['TeamID']}")
