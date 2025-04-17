@@ -80,6 +80,6 @@ with st.form("delete_event"):
                     error_msg = response.json().get('error', 'Unknown server error.')
                 except ValueError:
                     error_msg = response.text or 'No response body.'
-                st.error(f"❌ Failed to cancel event. Status {response.status_code}: {error_msg}")
+                st.error(f"❌ Status {response.status_code}: {error_msg}")
         except Exception as e:
             st.error(f"❗ Error connecting to API: {e}")
