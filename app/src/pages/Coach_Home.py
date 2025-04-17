@@ -54,8 +54,6 @@ with st.container():
     for strat in st.session_state.strategies:
         st.markdown(f"- {strat}")
 
-st.markdown("---")
-st.subheader("Manage Roster")
 
 # Add user input new player
 with st.expander("Player"):
