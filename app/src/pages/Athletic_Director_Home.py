@@ -44,9 +44,17 @@ with prof_layout[0]:
 mid = st.columns(3)
 
 
-api_url = 'http://web-api:4000/d/athletic_director/teams'
+with prof_layout[1]:
+    st.markdown("Your Contact Info")
+    st.text("Email: ethanwilson@easthigh.edu")
+    st.text("Phone: 317-891-0001")
+
+with prof_layout[1]:
+    st.markdown(" ")
 
 try:
+    api_url = 'http://web-api:4000/d/athletic_director/teams'
+    number_managed = 0
     response = requests.get(api_url)
     if response.status_code == 200:
         data = response.json()
@@ -60,17 +68,6 @@ try:
         st.error(f"API error. Status code: {response.status_code}")
 except Exception as e:
     st.error(f"Error connecting to API: {e}")
-
-
-
-with prof_layout[1]:
-    st.markdown("Your Contact Info")
-    st.text("Email: ethanwilson@easthigh.edu")
-    st.text("Phone: 317-891-0001")
-
-with prof_layout[1]:
-    st.markdown(" ")
-
 
 with prof_layout[1]:
     st.markdown("You Direct:")

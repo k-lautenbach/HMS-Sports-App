@@ -11,51 +11,56 @@ from backend.db_connection import db
 athletic_director = Blueprint('athletic_director', __name__)
 #------------------------------------------------------------------
 #gets teams in the athletic program at their school
-@athletic_director.route('/teams', methods=['GET'])
 def get_teams():
     try:
         cursor = db.get_db().cursor()
-        high_school = request.args.get('high_school')
         query = '''
             SELECT * 
             FROM Team t
             WHERE t.DirectorID = 131
         '''
-        cursor.execute(query,)
+        cursor.execute(query)
         theData = cursor.fetchall()
         return jsonify(theData), 200
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
-#------------------------------------------------------------------
-#gets coaches and their contacts in the athletic program at their school
-@athletic_director.route('/athletic_director/coaches', methods=['GET'])
-def get_coach():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT *
-        FROM Coach c
-        JOIN Team t on c.CoachID=t.CoachID
-        WHERE t.TeamID = 1
-    '''
-    team_id = request.args.get('team_id')
-    cursor.execute(query, (team_id,))
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
 
 #------------------------------------------------------------------
-#gets coaches and their contacts in the athletic program at their school
+# Gets coaches and their contacts by team
+@athletic_director.route('/athletic_director/coaches', methods=['GET'])
+def get_coach():
+    try:
+        team_id = request.args.get('team_id')
+        cursor = db.get_db().cursor()
+        query = '''
+            SELECT *
+            FROM Coach c
+            JOIN Team t ON c.CoachID = t.CoachID
+            WHERE t.TeamID = %s
+        '''
+        cursor.execute(query, (team_id,))
+        theData = cursor.fetchall()
+        return jsonify(theData), 200
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
+
+#------------------------------------------------------------------
+# Gets players by team
 @athletic_director.route('/athletic_director/players', methods=['GET'])
 def get_players():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT a.FirstName, a.LastName, a.TeamID
-        FROM Athlete a
-        WHERE t.TeamID = 1
-    '''
-    team_id = request.args.get('team_id')
-    cursor.execute(query, (team_id,))
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
+    try:
+        team_id = request.args.get('team_id')
+        cursor = db.get_db().cursor()
+        query = '''
+            SELECT a.FirstName, a.LastName, a.TeamID, a.Email
+            FROM Athlete a
+            WHERE a.TeamID = %s
+        '''
+        cursor.execute(query, (team_id,))
+        theData = cursor.fetchall()
+        return jsonify(theData), 200
+    except Exception as e:
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 #------------------------------------------------------------------
 #gets all practices where director id from team equals athletic director's id
 @athletic_director.route('/athletic_director/practices', methods=['GET'])

@@ -15,9 +15,9 @@ try:
         if data:
             st.write(data[0])
             team_df = pd.DataFrame(data)
+            team_df = team_df[['Name', 'TeamID']]
             st.success(f"Found {len(team_df)} coaches!")
             st.dataframe(team_df)
-            st.write(team_df)
         else:
             st.warning("No coaches matched your criteria.")
     else:
@@ -42,7 +42,6 @@ if team_id:
                 st.write(data[0])
                 coach_df = pd.DataFrame(Cdata)
                 st.success(f"Found {len(coach_df)} coaches!")
-                st.dataframe(coach_df)
                 coach_df['Email'] = coach_df['FirstName'].str.lower() + coach_df['LastName'].str.lower() + '@easthigh.edu'
                 st.markdown("The Coach")
                 top = st.columns([1,1])
@@ -67,7 +66,6 @@ if team_id:
                 st.write(data[0])
                 player_df = pd.DataFrame(Pdata)
                 st.success(f"Found {len(player_df)} players!")
-                st.dataframe(player_df)
                 st.markdown("The Players")
                 top = st.columns([1,1])
                 with top[0]:
