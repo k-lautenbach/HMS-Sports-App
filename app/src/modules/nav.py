@@ -66,7 +66,7 @@ def SideBarLinks(show_home=False):
     # About page always visible
     AboutPageNav()
 
-    # 🔓 Logout button
+    # Logout button
     if st.session_state["authenticated"]:
         if st.sidebar.button("Logout"):
             for key in ["role", "authenticated", "first_name"]:
