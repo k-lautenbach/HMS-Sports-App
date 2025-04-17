@@ -41,20 +41,7 @@ def get_players():
     cursor.execute(query, (team_id,))
     theData = cursor.fetchall()
     return jsonify(theData), 200
-#------------------------------------------------------------------
-#gets coaches and their contacts in the athletic program at their school
-@athletic_director.route('/athletic_director/players', methods=['GET'])
-def get_players():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT Athlete.FirstName, Athlete.LastName
-        FROM Athlete
-        WHERE Athlete.TeamID = %s
-    '''
-    team_id = request.args.get('team_id')
-    cursor.execute(query, (team_id,))
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
+
 #--------------------------------------------------------------
 # #gets all of the schools a player has saved (for recruitment)
 # @athletic_director.route('/athletic_director/coaches', methods=['GET'])
