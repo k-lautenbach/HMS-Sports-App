@@ -3,15 +3,14 @@ import requests
 import pandas as pd
 from modules.nav import SideBarLinks
 
-# Streamlit page setup
+# Streamlit setup
 st.set_page_config(layout="wide")
 st.title("🏀 Team Statistics")
-
-# Add navigation
 SideBarLinks()
 
 # Constants
 API_BASE = "http://api:4000"
+TEAM_ID = 1
 
 # -------------------------------
 # 🔄 Helper Functions
@@ -25,13 +24,22 @@ def fetch_team_info(team_id):
         st.error(f"Failed to fetch team information: {e}")
         return None
 
-def fetch_team_players(team_id):
+def fetch_team_players():
     try:
-        response = requests.get(f"{API_BASE}/a/players/{team_id}")
+        response = requests.get(f"{API_BASE}/a/players")
         response.raise_for_status()
         return response.json()
     except Exception as e:
         st.error(f"Failed to fetch team players: {e}")
+        return []
+
+def fetch_all_player_stats():
+    try:
+        response = requests.get(f"{API_BASE}/s/athletestats")
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        st.error(f"Failed to fetch all player stats: {e}")
         return []
 
 def fetch_player_stats_by_id(player_id):
@@ -43,38 +51,23 @@ def fetch_player_stats_by_id(player_id):
         st.error(f"Failed to fetch player stats: {e}")
         return None
 
-def fetch_all_player_stats():
-    try:
-        response = requests.get(f"{API_BASE}/s/athletestats")
-        response.raise_for_status()
-        return response.json()
-    except Exception as e:
-        st.error(f"Failed to fetch all player stats: {e}")
-        return []
-
 # -------------------------------
-# 🏀 Team Selection
+# 🏀 Team Info
 # -------------------------------
-st.subheader("Select Team")
-team_id = st.number_input("Team ID", min_value=1, value=1, step=1)
-
-team_data = fetch_team_info(team_id)
+team_data = fetch_team_info(TEAM_ID)
 if team_data:
     st.write(f"### {team_data['TeamName']} - {team_data['HighSchoolName']}")
 
 # -------------------------------
-# 📊 Player Statistics Table
+# 📊 Player Statistics
 # -------------------------------
-st.subheader("All Player Statistics")
-
-players = fetch_team_players(team_id)
+players = fetch_team_players()
+all_stats = fetch_all_player_stats()
 
 if not players:
     st.info("No players found for this team.")
 else:
-    all_stats = fetch_all_player_stats()
     player_stats_data = []
-
     for player in players:
         stats = [s for s in all_stats if s['PlayerID'] == player['PlayerID']]
         if stats:
@@ -100,7 +93,7 @@ else:
     if player_stats_data:
         df = pd.DataFrame(player_stats_data)
 
-        # Filters
+        # Filter Section
         st.subheader("Filter Players")
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -116,6 +109,7 @@ else:
             (df['Recruitment Status'].isin(recruit_filter))
         ]
 
+        # Data Table
         st.dataframe(
             filtered_df,
             use_container_width=True,
@@ -130,7 +124,7 @@ else:
             }
         )
 
-        # Team Summary
+        # Summary Stats
         st.subheader("Team Summary")
         col1, col2, col3 = st.columns(3)
         with col1:
@@ -167,7 +161,7 @@ else:
                         st.markdown("_No highlights link available_")
 
 # -------------------------------
-# 🔍 View Stats for Specific Player
+# 🔍 View Specific Player's Stats
 # -------------------------------
 st.subheader("🔍 View Stats for a Specific Player")
 

@@ -56,8 +56,4 @@ with profile_col2:
 
 st.markdown("---")
 
-# Compare Schools
-st.header("Compare Schools")
-st.markdown("Find your best fit")
-if st.button("Compare Now"):
-    st.switch_page("pages/Compare_Collges.py")
+
