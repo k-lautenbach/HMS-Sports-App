@@ -1,42 +1,59 @@
+# 04_Schedule.py
+
 import streamlit as st
 import requests
-from datetime import datetime
+import pandas as pd
 
 st.set_page_config(layout="wide")
-st.title("My Schedule")
+st.title("📅 My Schedule")
 
-practices = requests.get("http://api:4000/sch/practices").json()
-games = requests.get("http://api:4000/sch/games").json()
-events = requests.get("http://api:4000/sch/recruitingevents").json()
+# Constants (could be replaced with session vars)
+TEAM_ID = 1
+PLAYER_ID = 1
+API_BASE = "http://api:4000/cal/calendar"
 
-schedule = []
+# Safe fetch function
+def fetch_schedule_data(endpoint, params):
+    try:
+        response = requests.get(endpoint, params=params)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        st.error(f"Failed to fetch from {endpoint}: {e}")
+        return []
 
-for practice in practices:
-    schedule.append({
-        "Type": "Practice",
-        "Date": practice["Date"],
-        "Time": practice.get("Time", "08:00"),
-        "Location": practice.get("Location", "TBD")
-    })
+# -------------------------------
+# 📅 Practices Section
+# -------------------------------
+st.subheader("🏀 Team Practices")
 
-for game in games:
-    schedule.append({
-        "Type": "Game",
-        "Date": game["Date"],
-        "Time": game.get("Time", "18:00"),
-        "Opponent": game.get("Opponent", "TBD"),
-        "Location": game.get("Location", "TBD")
-    })
+practices = fetch_schedule_data(f"{API_BASE}/practices", {"team_id": TEAM_ID})
+if practices:
+    df_practices = pd.DataFrame(practices)[["Date", "Time", "Location"]]
+    st.table(df_practices)
+else:
+    st.info("No upcoming practices scheduled.")
 
-for event in events:
-    schedule.append({
-        "Type": "Recruiting Event",
-        "Date": event["Date"],
-        "Time": event.get("Time", "12:00"),
-        "College": event.get("CollegeName", "TBD"),
-        "Location": event.get("Location", "TBD")
-    })
+# -------------------------------
+# 🎯 Games Section
+# -------------------------------
+st.subheader("🎯 Upcoming Games")
 
-schedule.sort(key=lambda x: datetime.strptime(x["Date"], "%Y-%m-%d"))
-st.subheader("🗓️ Upcoming Events (Table View)")
-st.dataframe(schedule)
+games = fetch_schedule_data(f"{API_BASE}/games", {"team_id": TEAM_ID})
+if games:
+    df_games = pd.DataFrame(games)[["Date", "Time", "Location"]]
+    st.table(df_games)
+else:
+    st.info("No upcoming games scheduled.")
+
+# -------------------------------
+# 🧲 Recruiting Events Section
+# -------------------------------
+st.subheader("🧲 Recruiting Events")
+
+events = fetch_schedule_data(f"{API_BASE}/recruitingevents", {"player_id": PLAYER_ID})
+if events:
+    df_events = pd.DataFrame(events)[["Date", "Location"]]
+    st.table(df_events)
+else:
+    st.info("No recruiting events scheduled.")
