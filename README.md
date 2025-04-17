@@ -2,27 +2,75 @@
 
 This repo contains our semester project for CS320: Intro to Databases. It includes our infrastructure setup (containers), project databases, and UI pages. 
 
-## Directions to Set Up and Start Containers
+## Description
+An all-in-one database for a high school sport’s team that allows streamlined activity for it’s users. Because our app is focused on our specific user stories and personas, some aspects of the code are “hard coded” to display only results that pertain to them. 
+
+## Features
+This repo contains for archetypical users: Coach, Athlete, Recruiter, and Athletic Director. We use Role-Based Access Control to specify certain abilities and access. Here are tools created for their use:
+- Coach Features: Schedule viewing (games and practices), Strategy viewing(all strategies registered with the team).
+- Recruiter Features: Search for players that meet their recruitment requirements (has access to academic and athletic stats), 
+- Athlete Features: Stats management(canview or update), Can view  chedule(games, practices, and recruitment events), recruitment profile(includes, highlight reels, and scholarship guidance.
+- Athletic Director Tools- View All teams  the manage(with roster and coach info), Practice management(can view all practices and their info, and can add or delete practices)
+- App Features- Clear buttons on how to access tools, navigation sidebar which lets the user logout and go back to the previous page.
+
+## Built With: 
+- werkzeug
+- flask
+- flask-login
+- flask-mysql
+- cryptography
+- python-dotenv
+- pandas
+- streamlit
+- equests
+- validators
 
 ## Prerequisites
-
 - A GitHub Account
 - A terminal-based git client or GUI Git client such as GitHub Desktop or the Git plugin for VSCode.
 - VSCode with the Python Plugin
 - A distribution of Python running on your laptop. The distro supported by the course is Anaconda or Miniconda.
 
-## Major Project Components
+## Installation
+Clone your forked version of this repository:
+1. clone project: terminal
+a. in github: code>SSH>*copy*
+b. in terminal:
+c. git clone *paste
+2. Set up the .env file in the api folder using .env.template. 
+a. enter a new passcode
+3. Install dependencies from the requirements.txt files:
+bash
+a. For API folder: pip install -r ./api/requirements.txt
+b. For app folder: pip install -r ./app/requirements.txt
+4. Use Docker to start services:
+a. docker compose up -d
+5. To Stop and restart containers when updating the backend:
+a. docker compose down
+b. docker compose up -d
+6. Create new data source in data grip, and connect the database(used for testing queries and updating the database):
+a. create new project
+b. name it ‘project repo’
+c. change port to 3200
+d. user root
+e. put in .env password
+f. test connection
 
-There are three major components that each run in their own Docker Containers:
 
-- Streamlit App in the `./app` directory
-- Flask REST api in the `./api` directory
-- MySQL Database that will be initialized with SQL script files from the `./database-files` directory
+## Usage
+Break-Free Athletics offers intuitive tools for team and individual management. Users can:
+- Log in to access role-specific dashboards (e.g., coach tools, recruiter search).
+- Create player profiles with academic and athletic achievements.
+- Access highlights for top athletes.
+- Manage schedules, track stats, and connect directly with colleges and recruiters.
 
-## Project Description:
-We implemented an athletics app to help high-school student athletes through their college recruitment process. We were aiming to bridge the gap between these young athletes and their future schools. We wanted to create a place where students could connect with recruiters, coaches, and athletic directors in an accesible and streamlined environment. 
+## Contributions
+The contributors of this project are Kate Lautenbach, Emily Wang, Sophia Guerra, Noah Burra, and Rishona Israel. All team members contributed equally to the database design and conceptual development. Once progressing to the building phase, Emily and Sophia worked on creating all the blueprints and routes needed. For the UI, Kate worked on the Athletic Director pages, Emily worked on the Recruiter pages, Noah worked on the Athlete pages, and Rishona worked on the coach pages. Sophia did the home and navigation bar UI. After ensuring both the back and front ends were up and running, Emily worked on the UI and made sure the website was aesthetically pleasing. All team members were involved in debugging and resolving any conflicts. 
 
-We used Docker Desktop to create and run the database. These containers were built and createdin the docker-compose.yml file. We then used the Python Flask library to build blueprints for the relavant user persons and corresponding routes for each of these blueprints that help users execute their goals. The core database was cerated in DataGrip as a MySQL file. The current version of the app contains sample data generated through ChatGPT, though edits to the data could be made to better match an actual school system.
+## Further Steps
+In the future, we would like to implement more tools for our users that would streamline activity. For example, we would add contact information for all users that would allow easy access and communication. Additionally, we could have a messaging tool that allows users to directly send and receive messages between users. 
 
-We hope that this project can continue to be used to aid students in their recruitment process. In the future, we would love to expand this program to include some aspects of a social network, by opening up local communication lines between users. We also would like to implement retreiving contact information of an athlete or have a built in messages function. 
+## Presentation
+We prepared a [presentation](https://www.dropbox.com/scl/fo/xvq8gjvm8a2n3lc9ml2gi/AP33HnSugcZutj0y65PSgg8?rlkey=8w2u382ak0v0r93ub030069x7&st=u8jkzieq&dl=0 
+) that goes through the user pages and functions. 
 
