@@ -11,10 +11,11 @@ from backend.db_connection import db
 athletic_director = Blueprint('athletic_director', __name__)
 #------------------------------------------------------------------
 #gets teams in the athletic program at their school
-@athletic_director.route('/athletic_director/teams', methods=['GET'])
+@athletic_director.route('/teams', methods=['GET'])
 def get_teams():
     try:
         cursor = db.get_db().cursor()
+        high_school = request.args.get('high_school')
         query = '''
             SELECT * 
             FROM Team t
@@ -22,11 +23,9 @@ def get_teams():
         '''
         cursor.execute(query,)
         theData = cursor.fetchall()
-        print(f"✅ Query successful. Rows returned: {len(theData)}")
         return jsonify(theData), 200
     except Exception as e:
-        print("🔥 ERROR in get_teams:", e)
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 #------------------------------------------------------------------
 #gets coaches and their contacts in the athletic program at their school
 @athletic_director.route('/athletic_director/coaches', methods=['GET'])
@@ -42,20 +41,7 @@ def get_players():
     cursor.execute(query, (team_id,))
     theData = cursor.fetchall()
     return jsonify(theData), 200
-#------------------------------------------------------------------
-#gets coaches and their contacts in the athletic program at their school
-@athletic_director.route('/athletic_director/players', methods=['GET'])
-def get_players():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT Athlete.FirstName, Athlete.LastName
-        FROM Athlete
-        WHERE Athlete.TeamID = %s
-    '''
-    team_id = request.args.get('team_id')
-    cursor.execute(query, (team_id,))
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
+
 #--------------------------------------------------------------
 # #gets all of the schools a player has saved (for recruitment)
 # @athletic_director.route('/athletic_director/coaches', methods=['GET'])
@@ -90,19 +76,33 @@ def get_practices():
 
 #------------------------------------------------------------------
 #gets all games
-@athletic_director.route('/athletic_director/practices', methods=['GET'])
-def get_games():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT Date, Time, Location
-        FROM Game
-        WHERE TeamID = %s
-    '''
-    high_school_team = request.args.get('team_id')
-    cursor.execute(query, (high_school_team),)
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
 
+@athletic_director.route('/games', methods=['GET'])
+def get_games():
+    try:
+        team_id = request.args.get('team_id')
+        cursor = db.get_db().cursor()
+        query = '''
+            SELECT GameID, Date, Time, Location, HomeTeamID, AwayTeamID
+            FROM Game
+            WHERE HomeTeamID = %s OR AwayTeamID = %s
+            ORDER BY Date ASC;
+        '''
+        cursor.execute(query, (team_id, team_id))
+        rows = cursor.fetchall()
+
+        # If empty, just return empty list
+        if not rows:
+            return jsonify([]), 200
+
+        colnames = [desc[0] for desc in cursor.description]
+
+        # Only return actual data rows (skip if column names got inserted somehow)
+        valid_rows = [row for row in rows if row[0] != colnames[0]]
+        return jsonify([dict(zip(colnames, row)) for row in valid_rows]), 200
+
+    except Exception as e:
+        return jsonify({'error': 'Failed to fetch games', 'details': str(e)}), 500
 #------------------------------------------------------------------
 # adds a player
 @athletic_director.route('/athletic_director/addplayer', methods=['POST'])

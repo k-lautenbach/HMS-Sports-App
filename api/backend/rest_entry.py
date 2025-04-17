@@ -6,6 +6,7 @@ from backend.athletic_director.athletic_director_routes import athletic_director
 from backend.players.players_routes import players
 from backend.recruiter.recruiter_routes import recruiter
 from backend.stats.athlete_stats_routes import athletestats
+from backend.calendar.calendar_routes import calendar
 
 
 import os
@@ -47,6 +48,7 @@ def create_app():
     app.register_blueprint(recruiter, url_prefix='/r')
     app.register_blueprint(teams, url_prefix='/t')
     app.register_blueprint(athletestats, url_prefix='/s')
+    app.register_blueprint(calendar, url_prefix='/cal')
 
     # Don't forget to return the app object
     return app
