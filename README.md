@@ -9,7 +9,7 @@ An all-in-one database for a high school sport’s team that allows streamlined 
 This repo contains for archetypical users: Coach, Athlete, Recruiter, and Athletic Director. We use Role-Based Access Control to specify certain abilities and access. Here are tools created for their use:
 - Coach Features: Schedule viewing (games and practices), Strategy viewing(all strategies registered with the team).
 - Recruiter Features: Search for players that meet their recruitment requirements (has access to academic and athletic stats), 
-- Athlete Features: Stats management(canview or update), Can view  chedule(games, practices, and recruitment events), recruitment profile(includes, highlight reels, and scholarship guidance.
+- Athlete Features: Stats management(canview or update), Can view  chedule(games, practices, and recruitment events), recruitment profile(includes, highlight reels, and scholarship guidance)
 - Athletic Director Tools- View All teams  the manage(with roster and coach info), Practice management(can view all practices and their info, and can add or delete practices)
 - App Features- Clear buttons on how to access tools, navigation sidebar which lets the user logout and go back to the previous page.
 
@@ -34,27 +34,27 @@ This repo contains for archetypical users: Coach, Athlete, Recruiter, and Athlet
 ## Installation
 Clone your forked version of this repository:
 1. clone project: terminal
-a. in github: code>SSH>*copy*
-b. in terminal:
-c. git clone *paste
+- in github: code>SSH>*copy*
+- in terminal:
+- git clone *paste
 2. Set up the .env file in the api folder using .env.template. 
-a. enter a new passcode
+- enter a new passcode
 3. Install dependencies from the requirements.txt files:
 bash
-a. For API folder: pip install -r ./api/requirements.txt
-b. For app folder: pip install -r ./app/requirements.txt
+- For API folder: pip install -r ./api/requirements.txt
+- For app folder: pip install -r ./app/requirements.txt
 4. Use Docker to start services:
-a. docker compose up -d
+- docker compose up -d
 5. To Stop and restart containers when updating the backend:
-a. docker compose down
-b. docker compose up -d
+- docker compose down
+- docker compose up -d
 6. Create new data source in data grip, and connect the database(used for testing queries and updating the database):
-a. create new project
-b. name it ‘project repo’
-c. change port to 3200
-d. user root
-e. put in .env password
-f. test connection
+- create new project
+- name it ‘project repo’
+- change port to 3200
+- user root
+- put in .env password
+- test connection
 
 
 ## Usage
