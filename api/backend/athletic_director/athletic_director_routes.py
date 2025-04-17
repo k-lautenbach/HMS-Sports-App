@@ -29,36 +29,33 @@ def get_teams():
 #------------------------------------------------------------------
 #gets coaches and their contacts in the athletic program at their school
 @athletic_director.route('/athletic_director/coaches', methods=['GET'])
-def get_players():
+def get_coach():
     cursor = db.get_db().cursor()
     query = '''
         SELECT *
         FROM Coach c
         JOIN Team t on c.CoachID=t.CoachID
-        WHERE t.TeamID = %s
+        WHERE t.TeamID = 1
     '''
     team_id = request.args.get('team_id')
     cursor.execute(query, (team_id,))
     theData = cursor.fetchall()
     return jsonify(theData), 200
 
-#--------------------------------------------------------------
-# #gets all of the schools a player has saved (for recruitment)
-# @athletic_director.route('/athletic_director/coaches', methods=['GET'])
-# def get_coaches():
-#     cursor = db.get_db().cursor()
-#     query = '''
-#         SELECT Coach.FirstName, Coach.Last, Contact.Phone, Contact.Email
-#         FROM Coach
-#         JOIN Contact ON Coach.ContactID = Contact.ContactID
-#         WHERE Coach.CoachID IN (
-#             SELECT CoachID FROM Team WHERE HighSchoolName = %s);
-#         )
-#     '''
-#     high_school_team = request.args.get('team_id')
-#     cursor.execute(query, (high_school_team),)
-#     theData = cursor.fetchall()
-#     return jsonify(theData), 200
+#------------------------------------------------------------------
+#gets coaches and their contacts in the athletic program at their school
+@athletic_director.route('/athletic_director/players', methods=['GET'])
+def get_players():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT a.FirstName, a.LastName, a.TeamID
+        FROM Athlete a
+        WHERE t.TeamID = 1
+    '''
+    team_id = request.args.get('team_id')
+    cursor.execute(query, (team_id,))
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
 #------------------------------------------------------------------
 #gets all practices where director id from team equals athletic director's id
 @athletic_director.route('/athletic_director/practices', methods=['GET'])

@@ -13,6 +13,7 @@ try:
     if response.status_code == 200:
         data = response.json()
         if data:
+            st.write(data[0])
             team_df = pd.DataFrame(data)
             st.success(f"Found {len(team_df)} coaches!")
             st.dataframe(team_df)
@@ -38,6 +39,7 @@ if team_id:
         if coach_response.status_code == 200:
             Cdata = coach_response.json()
             if Cdata:
+                st.write(data[0])
                 coach_df = pd.DataFrame(Cdata)
                 st.success(f"Found {len(coach_df)} coaches!")
                 st.dataframe(coach_df)
@@ -62,6 +64,7 @@ if team_id:
         if player_response.status_code == 200:
             Pdata = player_response.json()
             if Pdata:
+                st.write(data[0])
                 player_df = pd.DataFrame(Pdata)
                 st.success(f"Found {len(player_df)} players!")
                 st.dataframe(player_df)

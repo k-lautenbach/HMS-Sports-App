@@ -19,25 +19,15 @@ st.write('')
 st.subheader("How can we help you today?")
 Ath_Dir_id = 101
 
-if st.button('Contact Your Coaches', 
+if st.button('View Coaches and Players', 
              type='primary', 
              use_container_width=True):
     st.switch_page('pages/Athletic_Directors_Coaches.py')
-
-if st.button('Add a Coach or Athlete',
-             type='primary',
-             use_container_width=True):
-    st.switch_page('pages/Athletic_Director_Input.py')
 
 if st.button('See and Manage East High Practices',
              type='primary',
              use_container_width=True):
     st.switch_page('pages/Athletic_Director_Practices.py')
-
-if st.button('test api',
-             type='primary',
-             use_container_width=True):
-    st.switch_page('pages/TEST_API.py')
 
 st.markdown("---")
 st.header("Your Profile")
@@ -63,8 +53,7 @@ try:
         if data:
             df = pd.DataFrame(data)
             st.success(f"Found {len(df)} events!")
-            
-            st.dataframe(df)
+            number_managed = len(df)
         else:
             st.warning("No players matched your criteria.")
     else:
@@ -72,7 +61,7 @@ try:
 except Exception as e:
     st.error(f"Error connecting to API: {e}")
 
-number_managed = len(df)
+
 
 with prof_layout[1]:
     st.markdown("Your Contact Info")
