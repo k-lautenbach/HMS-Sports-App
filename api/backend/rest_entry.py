@@ -7,7 +7,7 @@ from backend.players.players_routes import players
 from backend.recruiter.recruiter_routes import recruiter
 from backend.stats.athlete_stats_routes import athletestats
 from backend.calendar.calendar_routes import calendar
-
+from backend.coach.coach_route import coach
 
 import os
 from dotenv import load_dotenv
@@ -46,6 +46,7 @@ def create_app():
     app.register_blueprint(players,    url_prefix='/a')
     app.register_blueprint(athletic_director,    url_prefix='/d')
     app.register_blueprint(recruiter, url_prefix='/r')
+    app.register_blueprint(coach, url_prefix = '/c')
     app.register_blueprint(teams, url_prefix='/t')
     app.register_blueprint(athletestats, url_prefix='/s')
     app.register_blueprint(calendar, url_prefix='/cal')
