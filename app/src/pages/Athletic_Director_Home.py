@@ -31,7 +31,7 @@ if st.button('Add a Coach or Athlete',
 if st.button('See and Manage East Highs Schedule',
              type='primary',
              use_container_width=True):
-    st.switch_page('pages/Athletic_Director_Sched.py')
+    st.switch_page('pages/Athletic_Director_Practices.py')
 
 st.markdown("---")
 st.header("Your Profile")

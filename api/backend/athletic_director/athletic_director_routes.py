@@ -62,17 +62,17 @@ def get_coaches():
     theData = cursor.fetchall()
     return jsonify(theData), 200
 #------------------------------------------------------------------
-#gets all practices
+#gets all practices where team id from team equals athletic director's id
 @athletic_director.route('/athletic_director/practices', methods=['GET'])
 def get_practices():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT Date, Time, Location
-        FROM Practice
-        WHERE TeamID = %s
+        SELECT *
+        FROM Practice p 
+        JOIN Team t ON t.TeamID = p.PracticeID 
+        WHERE TeamID = 131
     '''
-    high_school_team = request.args.get('team_id')
-    cursor.execute(query, (high_school_team))
+    cursor.execute(query,)
     theData = cursor.fetchall()
     return jsonify(theData), 200
 

@@ -10,7 +10,7 @@ st.title("Manage Recruitment Schedule")
 # -----------------------------------------------
 # Display recruiter's event schedule
 if st.button("View Upcoming Events 📅"):
-        api_url = "http://web-api:4000/r/recruiter/events"
+        api_url = "http://web-api:4000/r/athletic_director/practices"
         try:
             response = requests.get(api_url)
             if response.status_code == 200:
