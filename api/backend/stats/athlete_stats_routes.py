@@ -98,3 +98,22 @@ def add_new_athlete_stats():
     except Exception as e:
         current_app.logger.error(f"POST /athletestats error: {e}")
         return jsonify({"error": str(e)}), 500
+# ------------------------------------------------------------
+# add stats using playerid
+@athletestats.route('/athletestats/player/<int:player_id>', methods=['GET'])
+def get_stats_by_player(player_id):
+    query = '''
+        SELECT StatsID, PlayerID, TotalPoints, GamesPlayed,
+               AssistsPerGame, Rebounds, PointsPerGame,
+               FreeThrowPercentage, HighlightsURL
+        FROM AthleteStats
+        WHERE PlayerID = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (player_id,))
+    theData = cursor.fetchone()
+    
+    if theData:
+        return make_response(jsonify(theData), 200)
+    else:
+        return jsonify({"error": "No stats found for this player"}), 404
