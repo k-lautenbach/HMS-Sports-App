@@ -15,26 +15,21 @@ athletic_director = Blueprint('athletic_director', __name__)
 def get_teams():
     try:
         cursor = db.get_db().cursor()
-        high_school = request.args.get('high_school')
-
         query = '''
-            SELECT Team.TeamName, Coach.First, Coach.Last, Team.HighSchoolName
-            FROM Team
-            LEFT JOIN Coach ON Team.CoachID = Coach.CoachID
-            WHERE Team.HighSchoolName = %s
+            SELECT * 
+            FROM Team t
+            WHERE t.DirectorID = 131
         '''
-        cursor.execute(query, (high_school,))
+        cursor.execute(query,)
         theData = cursor.fetchall()
-        print("✅ Fetched team data successfully")
+        print(f"✅ Query successful. Rows returned: {len(theData)}")
         return jsonify(theData), 200
-
     except Exception as e:
-        print(f"🔥 ERROR in /athletic_director/teams route: {e}")
-        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
+        print("🔥 ERROR in get_teams:", e)
+        return jsonify({"error": str(e)}), 500
 #------------------------------------------------------------------
 #gets coaches and their contacts in the athletic program at their school
-
-@athletic_director.route('/athletic_director/coaches', methods=['GET'])
+@athletic_director.route('/athletic_director/players', methods=['GET'])
 def get_players():
     cursor = db.get_db().cursor()
     query = '''
@@ -49,18 +44,22 @@ def get_players():
     theData = cursor.fetchall()
     return jsonify(theData), 200
 #--------------------------------------------------------------
-#gets all of the schools a player has saved (for recruitment)
-@athletic_director.route('/athletic_director/coaches', methods=['GET'])
-def get_coaches():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT Coach.FirstName, Coach.Last
-        FROM Coach
-    '''
-    high_school_team = request.args.get('team_id')
-    cursor.execute(query, (high_school_team),)
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
+# #gets all of the schools a player has saved (for recruitment)
+# @athletic_director.route('/athletic_director/coaches', methods=['GET'])
+# def get_coaches():
+#     cursor = db.get_db().cursor()
+#     query = '''
+#         SELECT Coach.FirstName, Coach.Last, Contact.Phone, Contact.Email
+#         FROM Coach
+#         JOIN Contact ON Coach.ContactID = Contact.ContactID
+#         WHERE Coach.CoachID IN (
+#             SELECT CoachID FROM Team WHERE HighSchoolName = %s);
+#         )
+#     '''
+#     high_school_team = request.args.get('team_id')
+#     cursor.execute(query, (high_school_team),)
+#     theData = cursor.fetchall()
+#     return jsonify(theData), 200
 #------------------------------------------------------------------
 #gets all practices where team id from team equals athletic director's id
 @athletic_director.route('/athletic_director/practices', methods=['GET'])
