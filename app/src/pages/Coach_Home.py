@@ -1,51 +1,53 @@
-import streamlit as st
-import requests
-import pandas as pd
 import logging
+logger = logging.getLogger(__name__)
+
+import streamlit as st
 from modules.nav import SideBarLinks
 
 st.set_page_config(layout='wide')
-logger = logging.getLogger(__name__)
 
 SideBarLinks()
 
-st.title("Jack Bolton")
+st.title(f"Hi Jack!")
+st.write('')
+st.write("### What would you like to do today?")
 
-col1, col2 = st.columns([2, 1])
-with col1:
-    st.subheader("Jack Bolton")
-    st.markdown("**Head Coach, East High Basketball**")
+if st.button('View Practices', 
+             type='primary', 
+             use_container_width=True):
+    st.switch_page('pages/Coach_Practices.py')
 
-with col2:
-    st.image("assets/jackboltonpfp.jpeg", width=175)
+if st.button('View Games',
+             type='primary',
+             use_container_width=True):
+    st.switch_page('pages/Coach_Games.py')
+
+if st.button('View Strategies',
+             type='primary',
+             use_container_width=True):
+    st.switch_page('pages/Coach_Strategies.py')
 
 st.markdown("---")
+st.subheader("🏀 Jack Bolton")
 
-st.subheader("Practices and Games")
+top = st.columns([2, 2, 1])
 
-# link to practice and game schedule page
-if st.button("Practice and Game Schedule", use_container_width=True):
-    st.switch_page("pages/Practice_Game_Schedule.py")
+with top[0]:
+    st.markdown("*East High Wildcats Boy's Varsity*")
 
-st.markdown("---")
-st.subheader("Strategies/Plays")
+with top[0]:
+    st.image("assets/jackboltonpfp.jpeg", width=250)
 
-
-if st.button("View Team Strategies"):
-        try:
-            api_url = "http://web-api:4000/c/coach/strategies"
-            response = requests.get(api_url)
-            if response.status_code == 200:
-                data = response.json()
-                if data:
-                    df = pd.DataFrame(data)
-                    st.success(f"Found {len(df)} Strategies!")
-                    
-                    st.dataframe(df)
-                else:
-                    st.warning("No players matched your criteria.")
-            else:
-                st.error(f"API error. Status code: {response.status_code}")
-        except Exception as e:
-            st.error(f"Error connecting to API: {e}")
+with top[1]:
+    st.markdown("### Contact")
+    st.markdown("**Email**: jackbolton@easthigh.edu")
+    st.markdown("**Phone**: 218-514-9123")
+    
+with top[1]:
+    st.subheader("Info")
+    st.markdown("""
+    - **Years Coaching**: 5
+    - **Season Record**: 20-5
+    - **Recent Titles**: Regional Champs, State Champs
+    """)
 

@@ -4,13 +4,23 @@ import streamlit as st
 
 NAV_CONFIG = {
     "athletic_director": [
-        ("pages/Athletic_Director_Home.py", "Athletic Director Home", "🧍‍♂️")
+        ("pages/Athletic_Director_Home.py", "Athletic Director Home", "🧑‍💻"),
+        ("pages/Athletic_Directors_Coaches.py", "View Staff & Teams", "🧍‍♂️"),
+        ("pages/Athletic_Director_Practices.py", "Practices", "📅"),
+
+
+
     ],
     "coach": [
-        ("pages/Coach_Home.py", "Coach Home", "👨‍💼")
+        ("pages/Coach_Home.py", "Coach Home", "🧑‍💻"),
+        ("pages/Coach_Practices.py", "Practices", "📅"),
+        ("pages/Coach_Games.py", "Games", "🏆"),
+        ("pages/Coach_Strategies.py", "Strategies", "🗒️")
     ],
     "athlete": [
-        ("pages/Athlete_Home.py", "Athlete Home", "🏃‍♂️")
+        ("pages/Athlete_Home.py", "Athlete Home", "🧑‍💻"),
+        ("pages/Athlete_Schedule.py", "Schedule", "📅"),
+        ("pages/Athlete_Stats.py", "My Stats", "🏃‍♂️"),
     ],
     "recruiter": [
         ("pages/Recruiter_Home.py", "Recruiter Home", "🧑‍💻"),
@@ -59,10 +69,7 @@ def SideBarLinks(show_home=False):
     elif st.session_state["authenticated"]:
         st.sidebar.warning("⚠️ Missing user role. Please return to Home.")
 
-    # Back to Home Page (only when logged in)
-    if st.session_state["authenticated"]:
-        st.sidebar.page_link("Home.py", label="Back to Home Page", icon="↩️")
-
+ 
     # About page
     AboutPageNav()
 

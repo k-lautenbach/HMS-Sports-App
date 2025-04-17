@@ -14,7 +14,7 @@ try:
         data = response.json()
         if data:
             df = pd.DataFrame(data)
-            st.success(f"Found {len(df)} coaches!")
+            st.success(f"Found {len(df)} teams!")
             st.dataframe(df)
         else:
             st.warning("No coaches matched your criteria.")

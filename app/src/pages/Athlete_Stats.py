@@ -1,5 +1,8 @@
 import streamlit as st
 import requests
+from modules.nav import SideBarLinks
+
+SideBarLinks()
 
 st.title("📈 Troy Bolton's Stats")
 
@@ -43,31 +46,3 @@ with st.form("update_stats"):
         res.raise_for_status()
         st.success("Stats Updated")
 
-# Add New Stats
-st.subheader("Add New Stats")
-with st.form("create_stats"):
-    player_id = st.number_input("Player ID", value=1)
-    points_new = st.number_input("Total Points", value=0)
-    games_new = st.number_input("Games Played", value=0)
-    assists_new = st.number_input("Assists Per Game", value=0.0)
-    rebounds_new = st.number_input("Rebounds", value=0)
-    ppg_new = st.number_input("Points Per Game", value=0.0)
-    ft_new = st.number_input("Free Throw %", value=0.0)
-    highlights_new = st.text_input("Highlights URL")
-
-    created = st.form_submit_button("Add New Stats Entry")
-    if created:
-        payload = {
-            "PlayerID": player_id,
-            "TotalPoints": points_new,
-            "GamesPlayed": games_new,
-            "AssistsPerGame": assists_new,
-            "Rebounds": rebounds_new,
-            "PointsPerGame": ppg_new,
-            "FreeThrowPercentage": ft_new,
-            "HighlightsURL": highlights_new
-        }
-
-        res = requests.post("http://api:4000/s/athletestats", json=payload)
-        res.raise_for_status()
-        st.success("✅ Stats Added Successfully!")

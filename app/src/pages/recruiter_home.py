@@ -40,8 +40,8 @@ with top[0]:
 
 with top[1]:
     st.markdown("### Contact")
-    st.text("Email: calgold@ucb.edu")
-    st.text("Phone: 718-214-9182")
+    st.markdown('''**Email**: calgold@ucb.edu''')
+    st.markdown('''**Phone**: 718-214-9182''')
     
 with top[1]:
     st.subheader("Recruitment Criteria")

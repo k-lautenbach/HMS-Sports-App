@@ -63,7 +63,7 @@ def get_players():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 #------------------------------------------------------------------
-#gets all practices where director id from team equals athletic director's id
+# gets all practices where director id from team equals athletic director's id
 @athletic_director.route('/athletic_director/practices', methods=['GET'])
 def get_practices():
     cursor = db.get_db().cursor()

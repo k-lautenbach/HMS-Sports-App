@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-st.title("Team Schedule")
+st.title("📅 Practices")
 
 TEAM_ID = 1
 PLAYER_ID = 1
@@ -20,13 +20,7 @@ def get_data(endpoint, params):
     return response.json()
 
 # -------------------------------
-st.subheader("Practices")
+st.subheader("⛹🏻 Practices")
 practices = get_data(f"{API_URL}/practices", {"team_id": TEAM_ID})
 df_practices = pd.DataFrame(practices)
 st.dataframe(df_practices)
-
-# -------------------------------
-st.subheader("Upcoming Games")
-games = get_data(f"{API_URL}/games", {"team_id": TEAM_ID})
-df_games = pd.DataFrame(games)
-st.dataframe(df_games)

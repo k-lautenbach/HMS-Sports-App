@@ -9,7 +9,8 @@ SideBarLinks()
 # Constants
 PLAYER_ID = 1
 
-st.title("Troy Bolton")
+st.title("Hi Troy,")
+st.header("Getcha' Head in the Game! 🏀")
 
 info = {
     "FirstName": "Troy",
@@ -28,13 +29,13 @@ with col1:
     st.header("📊 Stats")
     st.markdown("Track and update your on-court performance.")
     if st.button("View / Update Stats"):
-        st.switch_page("pages/02_Athlete_Stats.py")
+        st.switch_page("pages/Athlete_Stats.py")
 
 with col2:
     st.header("📅 Schedule")
     st.markdown("Keep up with games, practices, and recruiting events.")
     if st.button("View Schedule"):
-        st.switch_page("pages/04_Schedule.py")
+        st.switch_page("pages/Athlete_Schedule.py")
 
 st.markdown("---")
 
