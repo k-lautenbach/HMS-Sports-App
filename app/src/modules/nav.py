@@ -31,15 +31,15 @@ def AboutPageNav():
 # ------------------------ Main Navigation Sidebar ------------------------
 
 def SideBarLinks(show_home=False):
-    # Add logo to sidebar
+    # Logo for sidebar
     st.sidebar.image("assets/bfa.logo.png", width=150)
 
-    # Ensure session_state has default values
+    # Ensures session_state has default values
     if "authenticated" not in st.session_state:
         st.session_state["authenticated"] = False
         st.switch_page("Home.py")
 
-    # Optional: Welcome message if logged in
+    # Welcome message (if logged in)
     if st.session_state["authenticated"] and "first_name" in st.session_state:
         st.sidebar.markdown(f"👋 Welcome, **{st.session_state['first_name']}**!")
 
@@ -47,7 +47,7 @@ def SideBarLinks(show_home=False):
     if show_home:
         HomeNav()
 
-    # Role-based navigation links
+    # Role-based nav links
     if st.session_state["authenticated"] and "role" in st.session_state:
         role = st.session_state["role"]
 
@@ -59,11 +59,11 @@ def SideBarLinks(show_home=False):
     elif st.session_state["authenticated"]:
         st.sidebar.warning("⚠️ Missing user role. Please return to Home.")
 
-    # Back to Home Page link (only when logged in)
+    # Back to Home Page (only when logged in)
     if st.session_state["authenticated"]:
         st.sidebar.page_link("Home.py", label="Back to Home Page", icon="↩️")
 
-    # About page always visible
+    # About page
     AboutPageNav()
 
     # Logout button
