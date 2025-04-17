@@ -1,4 +1,9 @@
 # `database-files` Folder
-### TO RESTRAP THE DATABASE 
-# put docker compose down into terminal 
-# and then docker compose up -d
+
+Contains database with athlete, teams, coaches, director, recruiter, event data
+
+### TO RESTRAP THE DATABASE
+Make sure Docker is running
+Input Terminal commands:
+1. docker compose down into terminal 
+2. docker compose up -d

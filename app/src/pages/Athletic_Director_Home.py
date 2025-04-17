@@ -6,7 +6,6 @@ from modules.nav import SideBarLinks
 import pandas as pd
 
 
-
 # set up page
 logger = logging.getLogger(__name__)
 st.set_page_config(

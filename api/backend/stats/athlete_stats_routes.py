@@ -1,3 +1,7 @@
+
+########################################################
+# Athlete's Stat Routes
+########################################################
 from flask import Blueprint
 from flask import request
 from flask import jsonify
@@ -69,51 +73,3 @@ def update_athlete_stats(stats_id):
     db.get_db().commit()
     return make_response("Updated", 200)
 
-# ------------------------------------------------------------
-# Add new stats to athlete
-@athletestats.route('/athletestats', methods=['POST'])
-def add_new_athlete_stats():
-    try:
-        theData = request.json
-        query = '''
-            INSERT INTO AthleteStats 
-            (PlayerID, TotalPoints, GamesPlayed, AssistsPerGame,
-             Rebounds, PointsPerGame, FreeThrowPercentage, HighlightsURL)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        '''
-        cursor = db.get_db().cursor()
-        cursor.execute(query, (
-            theData['PlayerID'],
-            theData['TotalPoints'],
-            theData['GamesPlayed'],
-            theData['AssistsPerGame'],
-            theData['Rebounds'],
-            theData['PointsPerGame'],
-            theData['FreeThrowPercentage'],
-            theData['HighlightsURL']
-        ))
-        db.get_db().commit()
-        return make_response("Added New stats", 200)
-
-    except Exception as e:
-        current_app.logger.error(f"POST /athletestats error: {e}")
-        return jsonify({"error": str(e)}), 500
-# ------------------------------------------------------------
-# add stats using playerid
-@athletestats.route('/athletestats/player/<int:player_id>', methods=['GET'])
-def get_stats_by_player(player_id):
-    query = '''
-        SELECT StatsID, PlayerID, TotalPoints, GamesPlayed,
-               AssistsPerGame, Rebounds, PointsPerGame,
-               FreeThrowPercentage, HighlightsURL
-        FROM AthleteStats
-        WHERE PlayerID = %s
-    '''
-    cursor = db.get_db().cursor()
-    cursor.execute(query, (player_id,))
-    theData = cursor.fetchone()
-    
-    if theData:
-        return make_response(jsonify(theData), 200)
-    else:
-        return jsonify({"error": "No stats found for this player"}), 404

@@ -2,6 +2,8 @@
 
 This repo contains our semester project for CS320: Intro to Databases. It includes our infrastructure setup (containers), project databases, and UI pages. 
 
+## Directions to Set Up and Start Containers
+
 ## Prerequisites
 
 - A GitHub Account
@@ -22,5 +24,5 @@ We implemented an athletics app to help high-school student athletes through the
 
 We used Docker Desktop to create and run the database. These containers were built and createdin the docker-compose.yml file. We then used the Python Flask library to build blueprints for the relavant user persons and corresponding routes for each of these blueprints that help users execute their goals. The core database was cerated in DataGrip as a MySQL file. The current version of the app contains sample data generated through ChatGPT, though edits to the data could be made to better match an actual school system.
 
-We hope that this project can continue to be used to aid students in their recruitment process. In the future, we would love to expandt this program to include some aspects of a social network, by opening up local communication lines between users. 
+We hope that this project can continue to be used to aid students in their recruitment process. In the future, we would love to expand this program to include some aspects of a social network, by opening up local communication lines between users. We also would like to implement retreiving contact information of an athlete or have a built in messages function. 
 

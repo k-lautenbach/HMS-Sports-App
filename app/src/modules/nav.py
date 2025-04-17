@@ -8,8 +8,6 @@ NAV_CONFIG = {
         ("pages/Athletic_Directors_Coaches.py", "View Staff & Teams", "🧍‍♂️"),
         ("pages/Athletic_Director_Practices.py", "Practices", "📅"),
 
-
-
     ],
     "coach": [
         ("pages/Coach_Home.py", "Coach Home", "🧑‍💻"),

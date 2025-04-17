@@ -6,7 +6,6 @@ logger = logging.getLogger(__name__)
 st.set_page_config(layout='wide')
 SideBarLinks()
 
-# Constants
 PLAYER_ID = 1
 
 st.title("Hi Troy,")

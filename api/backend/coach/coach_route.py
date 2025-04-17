@@ -1,5 +1,5 @@
 ########################################################
-# Routes for Coach Blueprint
+# Routes for Coach Strategies
 ########################################################
 from flask import Blueprint
 from flask import request
