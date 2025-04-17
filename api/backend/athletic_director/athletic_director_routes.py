@@ -60,143 +60,100 @@ def get_players():
 #     theData = cursor.fetchall()
 #     return jsonify(theData), 200
 #------------------------------------------------------------------
-#gets all practices where team id from team equals athletic director's id
+#gets all practices where director id from team equals athletic director's id
 @athletic_director.route('/athletic_director/practices', methods=['GET'])
 def get_practices():
     cursor = db.get_db().cursor()
+
     query = '''
-        SELECT *
+        SELECT p.PracticeID, p.DateTime, p.Location, t.TeamName, t.Sport
         FROM Practice p 
-        JOIN Team t ON t.TeamID = p.PracticeID 
-        WHERE TeamID = 131
+        JOIN Team t ON t.TeamID = p.TeamID 
+        WHERE t.DirectorID = 131
+        ORDER BY p.DateTime ASC
     '''
-    cursor.execute(query,)
+    cursor.execute(query)
     theData = cursor.fetchall()
+
     return jsonify(theData), 200
+
+#----------------------------------------------------------
+# schedule a practice 
+@athletic_director.route('/athletic_director/practices', methods=['POST'])
+def add_practice():
+    cursor = db.get_db().cursor()
+
+    data = request.get_json()
+
+    team_name = data.get('TeamName')
+    date_time = data.get('DateTime')
+    location = data.get('Location')
+
+    team_query = 'SELECT TeamID FROM Team WHERE TeamName = %s'
+    cursor.execute(team_query, (team_name,))
+    result = cursor.fetchone()
+
+    if not team_name or not date_time or not location:
+            return jsonify({'error': 'Please fill all fields!'}), 400
+
+    if not result:
+        return jsonify({'error': 'Team not found'}), 404
+
+    team_id = result['TeamID']
+
+    # checks if a practice already exists at the same time and location
+    conflict_query = '''
+        SELECT * FROM Practice
+        WHERE DateTime = %s AND Location = %s
+    '''
+    cursor.execute(conflict_query, (date_time, location))
+    conflict = cursor.fetchone()
+
+    if conflict:
+        return jsonify({
+            'error': 'A practice is already scheduled at this time and location.'
+        }), 409  
+
+
+    insert_query = '''
+        INSERT INTO Practice (DateTime, Location, TeamID, DirectorID)
+        VALUES (%s, %s, %s, %s)
+    '''
+    cursor.execute(insert_query, (date_time, location, team_id, 131))
+    db.get_db().commit()
+
+    return jsonify({'message': 'Practice added successfully'}), 200
+
+#------------------------------------------------------------------
+#removes a practice  
+@athletic_director.route('/athletic_director/practices', methods=['DELETE'])
+def delete_practice():
+    cursor = db.get_db().cursor()
+    practice_id = request.args.get('PracticeID')
+
+    if not practice_id:
+        return jsonify({'error': 'Please input practice_id!'}), 400
+
+# checks and makes sure that the practice exists 
+    check_query = '''
+        SELECT * FROM Practice
+        WHERE PracticeID = %s AND DirectorID = 131;
+    '''
+    cursor.execute(check_query, (practice_id,))
+    result = cursor.fetchone()
+
+    if not result:
+        return jsonify({'error': f'Practice {practice_id} not found.'}), 404
+
+    delete_query = '''
+        DELETE FROM Practice
+        WHERE PracticeID = %s AND DirectorID = 131;
+    '''
+    cursor.execute(delete_query, (practice_id,))
+    db.get_db().commit()
+
+    return jsonify({'message': f'Successfully cancelled practice {practice_id}!'}), 200
 
 #------------------------------------------------------------------
 #gets all games
 
-@athletic_director.route('/games', methods=['GET'])
-def get_games():
-    try:
-        team_id = request.args.get('team_id')
-        cursor = db.get_db().cursor()
-        query = '''
-            SELECT GameID, Date, Time, Location, HomeTeamID, AwayTeamID
-            FROM Game
-            WHERE HomeTeamID = %s OR AwayTeamID = %s
-            ORDER BY Date ASC;
-        '''
-        cursor.execute(query, (team_id, team_id))
-        rows = cursor.fetchall()
-
-        # If empty, just return empty list
-        if not rows:
-            return jsonify([]), 200
-
-        colnames = [desc[0] for desc in cursor.description]
-
-        # Only return actual data rows (skip if column names got inserted somehow)
-        valid_rows = [row for row in rows if row[0] != colnames[0]]
-        return jsonify([dict(zip(colnames, row)) for row in valid_rows]), 200
-
-    except Exception as e:
-        return jsonify({'error': 'Failed to fetch games', 'details': str(e)}), 500
-#------------------------------------------------------------------
-# adds a player
-@athletic_director.route('/athletic_director/addplayer', methods=['POST'])
-def add_player():
-    cursor = db.get_db().cursor()
-    data = request.get_json()
-    query = '''
-        INSERT INTO Athlete (
-            FirstName, LastName, Gender, GPA, GradeLevel, Height, Position, RecruitmentStatus, ContactID, TeamID
-        ) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    '''
-    values = (data.get('FirstName'), data.get('LastName'), data.get('Gender'), data.get('GPA'), data.get('GradeLevel'), data.get('Height'), data.get('Position'), data.get('RecruitmentStatus'), data.get('ContactID'), data.get('TeamID'))
-    cursor.execute(query, values)
-    db.get_db().commit()
-    return jsonify({'message':'Player added successfully'}), 200
-#------------------------------------------------------------------
-# deletes a player
-@athletic_director.route('/athletic_director/deleteplayer', methods=['DELETE'])
-def delete_player():
-    cursor = db.get_db().cursor()
-    player_id = request.args.get('player_id')
-    if not player_id:
-        return jsonify({'error': 'Missing player_id'}), 400
-    query = '''
-        DELETE FROM Athlete
-        WHERE PlayerID = %s;
-    '''
-    cursor.execute(query, (player_id),)
-    db.get_db().commit()
-    return jsonify({'message':f'Player {player_id} deleted successfully'}), 200
-
-#------------------------------------------------------------------
-# adds a coach
-@athletic_director.route('/athletic_director/addcoach', methods=['POST'])
-def add_coach():
-    cursor = db.get_db().cursor()
-    data = request.get_json()
-    query = '''
-        INSERT INTO Coach (
-            CoachID, FirstName, LastName
-        ) 
-        VALUES (%s, %s, %s)
-    '''
-    values = (data.get('CoachID'), data.get('FirstName'), data.get('LastName'))
-    cursor.execute(query, values)
-    db.get_db().commit()
-    return jsonify({'message':'Coach added successfully'}), 200
-
-#------------------------------------------------------------------
-# deletes a coach
-@athletic_director.route('/athletic_director/deletecoach', methods=['DELETE'])
-def delete_coach():
-    cursor = db.get_db().cursor()
-    coach_id = request.args.get('coach_id')
-    if not coach_id:
-        return jsonify({'error': 'Missing coach_id'}), 400
-    query = '''
-        DELETE FROM Coach
-        WHERE CoachID = %s;
-    '''
-    cursor.execute(query, (coach_id),)
-    db.get_db().commit()
-    return jsonify({'message':f'Player {coach_id} deleted successfully'}), 200
-
-#------------------------------------------------------------------
-# adds a game
-@athletic_director.route('/athletic_director/addgame', methods=['POST'])
-def add_game():
-    cursor = db.get_db().cursor()
-    data = request.get_json()
-    query = '''
-        INSERT INTO Game (
-            GameID, Data, Time, Location, HomeTeamID, AwayTeamID, DirectorID
-        ) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
-    '''
-    values = (data.get('GameID'), data.get('Date'), data.get('Time'), data.get('Location'), data.get('HomeTeamID'), data.get('AwayTeamID'), data.get('DirectorID'))
-    cursor.execute(query, values)
-    db.get_db().commit()
-    return jsonify({'message':'Game added successfully'}), 200
-
-#------------------------------------------------------------------
-# deletes a game
-@athletic_director.route('/athletic_director/deletegame', methods=['DELETE'])
-def delete_game():
-    cursor = db.get_db().cursor()
-    game_id = request.args.get('game_id')
-    if not game_id:
-        return jsonify({'error': 'Missing game_id'}), 400
-    query = '''
-        DELETE FROM Game
-        WHERE GameID = %s;
-    '''
-    cursor.execute(query, (game_id),)
-    db.get_db().commit()
-    return jsonify({'message':f'Player {game_id} deleted successfully'}), 200

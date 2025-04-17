@@ -29,10 +29,10 @@ if st.button('Add a Coach or Athlete',
              use_container_width=True):
     st.switch_page('pages/Athletic_Director_Input.py')
 
-if st.button('See and Manage East Highs Schedule',
+if st.button('See and Manage East High Practices',
              type='primary',
              use_container_width=True):
-    st.switch_page('pages/Athletic_Director_Sched.py')
+    st.switch_page('pages/Athletic_Director_Practices.py')
 
 if st.button('test api',
              type='primary',

@@ -64,11 +64,9 @@ CREATE TABLE RecruitingEvents (
 );
 
 
-
 CREATE TABLE Game (
-    GameID INT PRIMARY KEY,
-    Date DATE,
-    Time TIME,
+    GameID INT AUTO_INCREMENT PRIMARY KEY,
+    DateTime DATETIME,
     Location VARCHAR(100),
     HomeTeamID INT,
     AwayTeamID INT,
@@ -79,9 +77,8 @@ CREATE TABLE Game (
 );
 
 CREATE TABLE Practice (
-    PracticeID INT PRIMARY KEY,
-    Date DATE,
-    Time TIME,
+    PracticeID INT AUTO_INCREMENT PRIMARY KEY,
+    DateTime DATETIME,
     Location VARCHAR(100),
     TeamID INT,
     DirectorID INT,
@@ -390,88 +387,71 @@ INSERT INTO RecruitingEvents (DateTime, Location, RecruiterID) VALUES
 ;
 
 
-INSERT INTO Game (GameID, Date, Time, Location, HomeTeamID, AwayTeamID, DirectorID) VALUES
--- East High Wildcats (Team 1) home games vs other basketball teams
-(1, '2025-04-18', '19:00:00', 'East High', 1, 2, 131),  -- vs North High Tigers
-(2, '2025-04-25', '19:00:00', 'East High', 1, 3, 131),  -- vs Central High Panthers
-(3, '2025-05-02', '19:00:00', 'East High', 1, 4, 131),  -- vs West High Ravens
-(4, '2025-05-09', '19:00:00', 'East High', 1, 5, 131),  -- vs Silver Valley Cougars
-(5, '2025-05-16', '19:00:00', 'East High', 1, 6, 131),  -- vs South High Eagles
-
--- East High Wildcats (Team 1) away games vs other basketball teams
-(6, '2025-04-22', '19:30:00', 'North High', 2, 1, 102), -- at North High Tigers
-(7, '2025-04-29', '19:30:00', 'Central High', 3, 1, 103), -- at Central High Panthers
-(8, '2025-05-06', '19:30:00', 'West High', 4, 1, 104), -- at West High Ravens
-(9, '2025-05-13', '19:30:00', 'Silver Valley High', 5, 1, 105), -- at Silver Valley Cougars
-(10, '2025-05-20', '19:30:00', 'South High', 6, 1, 106), -- at South High Eagles
-
--- Other basketball matchups (not involving East High)
-(11, '2025-04-19', '18:00:00', 'North High', 2, 3, 102), -- North vs Central
-(12, '2025-04-26', '18:00:00', 'West High', 4, 5, 104), -- West vs Silver Valley
-(13, '2025-05-03', '18:00:00', 'South High', 6, 2, 106), -- South vs North
-(14, '2025-05-10', '18:00:00', 'Central High', 3, 4, 103), -- Central vs West
-(15, '2025-05-17', '18:00:00', 'Silver Valley High', 5, 6, 105), -- Silver Valley vs South
-
--- More basketball games with other teams
-(16, '2025-04-20', '17:00:00', 'Sunset Ridge High', 11, 12, 107), -- Central Force vs Central Knights
-(17, '2025-04-27', '17:00:00', 'Bayview High', 13, 14, 109), -- Central Heat vs Central Racers
-(18, '2025-05-04', '17:00:00', 'Oakwood High', 15, 16, 111), -- West Fire vs West Bolts
-(19, '2025-05-11', '17:00:00', 'Riverbend High', 17, 19, 113), -- West Grit vs North Storm
-(20, '2025-05-18', '17:00:00', 'Clearwater High', 19, 20, 115); -- North Storm vs North Speed
+INSERT INTO Game (DateTime, Location, HomeTeamID, AwayTeamID, DirectorID) VALUES
+('2025-04-18 19:00:00', 'East High', 1, 2, 131),
+('2025-04-25 19:00:00', 'East High', 1, 3, 131),
+('2025-05-02 19:00:00', 'East High', 1, 4, 131),
+('2025-05-09 19:00:00', 'East High', 1, 5, 131),
+('2025-05-16 19:00:00', 'East High', 1, 6, 131),
+('2025-04-22 19:30:00', 'North High', 2, 1, 102),
+('2025-04-29 19:30:00', 'Central High', 3, 1, 103),
+('2025-05-06 19:30:00', 'West High', 4, 1, 104),
+('2025-05-13 19:30:00', 'Silver Valley High', 5, 1, 105),
+('2025-05-20 19:30:00', 'South High', 6, 1, 106),
+('2025-04-19 18:00:00', 'North High', 2, 3, 102),
+('2025-04-26 18:00:00', 'West High', 4, 5, 104),
+('2025-05-03 18:00:00', 'South High', 6, 2, 106),
+('2025-05-10 18:00:00', 'Central High', 3, 4, 103),
+('2025-05-17 18:00:00', 'Silver Valley High', 5, 6, 105),
+('2025-04-20 17:00:00', 'Sunset Ridge High', 11, 12, 107),
+('2025-04-27 17:00:00', 'Bayview High', 13, 14, 109),
+('2025-05-04 17:00:00', 'Oakwood High', 15, 16, 111),
+('2025-05-11 07:00:00', 'Riverbend High', 17, 19, 113),
+('2025-05-18 17:00:00', 'Clearwater High', 19, 20, 115);
 
 
-INSERT INTO Practice (PracticeID, Date, Time, Location, TeamID, DirectorID) VALUES
--- East High Wildcats Basketball (Team 1) practices
-(1, '2025-04-17', '15:30:00', 'East High Main Gym', 1, 131),
-(2, '2025-04-21', '15:30:00', 'East High Main Gym', 1, 131),
-(3, '2025-04-24', '15:30:00', 'East High Main Gym', 1, 131),
-(4, '2025-04-28', '15:30:00', 'East High Main Gym', 1, 131),
-(5, '2025-05-01', '15:30:00', 'East High Main Gym', 1, 131),
-(6, '2025-05-05', '15:30:00', 'East High Main Gym', 1, 131),
-(7, '2025-05-08', '15:30:00', 'East High Main Gym', 1, 131),
-(8, '2025-05-12', '15:30:00', 'East High Main Gym', 1, 131),
-(9, '2025-05-15', '15:30:00', 'East High Main Gym', 1, 131),
-(10, '2025-05-19', '15:30:00', 'East High Main Gym', 1, 131),
+INSERT INTO Practice (DateTime, Location, TeamID, DirectorID) VALUES
+('2025-04-17 15:30:00', 'East High Main Gym', 1, 131),
+('2025-04-21 15:30:00', 'East High Main Gym', 1, 131),
+('2025-04-24 15:30:00', 'East High Main Gym', 1, 131),
+('2025-04-28 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-01 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-05 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-08 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-12 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-15 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-19 15:30:00', 'East High Main Gym', 1, 131),
+('2025-04-17 16:30:00', 'East High Soccer Field', 7, 131),
+('2025-04-21 16:30:00', 'East High Soccer Field', 7, 131),
+('2025-04-24 16:30:00', 'East High Soccer Field', 7, 131),
+('2025-04-28 16:30:00', 'East High Soccer Field', 7, 131),
+('2025-05-01 16:30:00', 'East High Soccer Field', 7, 131),
+('2025-04-18 15:30:00', 'East High Football Field', 8, 131),
+('2025-04-22 15:30:00', 'East High Football Field', 8, 131),
+('2025-04-25 15:30:00', 'East High Football Field', 8, 131),
+('2025-04-29 15:30:00', 'East High Football Field', 8, 131),
+('2025-05-02 15:30:00', 'East High Football Field', 8, 131),
+('2025-04-18 16:30:00', 'East High Auxiliary Gym', 9, 131),
+('2025-04-22 16:30:00', 'East High Auxiliary Gym', 9, 131),
+('2025-04-25 16:30:00', 'East High Auxiliary Gym', 9, 131),
+('2025-04-29 16:30:00', 'East High Auxiliary Gym', 9, 131),
+('2025-05-02 16:30:00', 'East High Auxiliary Gym', 9, 131),
+('2025-04-19 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-04-23 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-04-26 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-04-30 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-05-03 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-05-07 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-05-10 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-05-14 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-05-17 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-05-21 15:00:00', 'East High Tennis Courts', 10, 131),
+('2025-05-22 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-26 15:30:00', 'East High Main Gym', 1, 131),
+('2025-05-29 15:30:00', 'East High Main Gym', 1, 131),
+('2025-06-02 15:30:00', 'East High Main Gym', 1, 131),
+('2025-06-05 15:30:00', 'East High Main Gym', 1, 131);
 
--- East High Thunder Soccer (Team 7) practices
-(11, '2025-04-17', '16:30:00', 'East High Soccer Field', 7, 131),
-(12, '2025-04-21', '16:30:00', 'East High Soccer Field', 7, 131),
-(13, '2025-04-24', '16:30:00', 'East High Soccer Field', 7, 131),
-(14, '2025-04-28', '16:30:00', 'East High Soccer Field', 7, 131),
-(15, '2025-05-01', '16:30:00', 'East High Soccer Field', 7, 131),
-
--- East High Lightning Football (Team 8) practices
-(16, '2025-04-18', '15:30:00', 'East High Football Field', 8, 131),
-(17, '2025-04-22', '15:30:00', 'East High Football Field', 8, 131),
-(18, '2025-04-25', '15:30:00', 'East High Football Field', 8, 131),
-(19, '2025-04-29', '15:30:00', 'East High Football Field', 8, 131),
-(20, '2025-05-02', '15:30:00', 'East High Football Field', 8, 131),
-
--- East High Flyers Volleyball (Team 9) practices
-(21, '2025-04-18', '16:30:00', 'East High Auxiliary Gym', 9, 131),
-(22, '2025-04-22', '16:30:00', 'East High Auxiliary Gym', 9, 131),
-(23, '2025-04-25', '16:30:00', 'East High Auxiliary Gym', 9, 131),
-(24, '2025-04-29', '16:30:00', 'East High Auxiliary Gym', 9, 131),
-(25, '2025-05-02', '16:30:00', 'East High Auxiliary Gym', 9, 131),
-
--- East High Aces Tennis (Team 10) practices
-(26, '2025-04-19', '15:00:00', 'East High Tennis Courts', 10, 131),
-(27, '2025-04-23', '15:00:00', 'East High Tennis Courts', 10, 131),
-(28, '2025-04-26', '15:00:00', 'East High Tennis Courts', 10, 131),
-(29, '2025-04-30', '15:00:00', 'East High Tennis Courts', 10, 131),
-(30, '2025-05-03', '15:00:00', 'East High Tennis Courts', 10, 131),
-(31, '2025-05-07', '15:00:00', 'East High Tennis Courts', 10, 131),
-(32, '2025-05-10', '15:00:00', 'East High Tennis Courts', 10, 131),
-(33, '2025-05-14', '15:00:00', 'East High Tennis Courts', 10, 131),
-(34, '2025-05-17', '15:00:00', 'East High Tennis Courts', 10, 131),
-(35, '2025-05-21', '15:00:00', 'East High Tennis Courts', 10, 131),
-
--- Additional practices for East High Wildcats Basketball (Team 1)
-(36, '2025-05-22', '15:30:00', 'East High Main Gym', 1, 131),
-(37, '2025-05-26', '15:30:00', 'East High Main Gym', 1, 131),
-(38, '2025-05-29', '15:30:00', 'East High Main Gym', 1, 131),
-(39, '2025-06-02', '15:30:00', 'East High Main Gym', 1, 131),
-(40, '2025-06-05', '15:30:00', 'East High Main Gym', 1, 131);
 
 
 -- Insert complete data for all athletes
