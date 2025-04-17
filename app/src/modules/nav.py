@@ -43,11 +43,11 @@ def SideBarLinks(show_home=False):
     if st.session_state["authenticated"] and "first_name" in st.session_state:
         st.sidebar.markdown(f"👋 Welcome, **{st.session_state['first_name']}**!")
 
-    # Show Home nav link if specified
+    # Show Home link at top if show_home is requested
     if show_home:
         HomeNav()
 
-    # Show role-based links if authenticated
+    # Role-based navigation links
     if st.session_state["authenticated"] and "role" in st.session_state:
         role = st.session_state["role"]
 
@@ -59,10 +59,14 @@ def SideBarLinks(show_home=False):
     elif st.session_state["authenticated"]:
         st.sidebar.warning("⚠️ Missing user role. Please return to Home.")
 
-    # Always show the About page
+    # Back to Home Page link (only when logged in)
+    if st.session_state["authenticated"]:
+        st.sidebar.page_link("Home.py", label="Back to Home Page", icon="↩️")
+
+    # About page always visible
     AboutPageNav()
 
-    # Logout button if logged in
+    # 🔓 Logout button
     if st.session_state["authenticated"]:
         if st.sidebar.button("Logout"):
             for key in ["role", "authenticated", "first_name"]:
