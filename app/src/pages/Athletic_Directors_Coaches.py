@@ -4,21 +4,29 @@ import requests
 from modules.nav import SideBarLinks
 import pandas as pd
 
+st.title(f"Your Teams:")
 SideBarLinks()
 
-st.title(f"Your Teams:")
 team_url = 'http://web-api:4000/d/athletic_director/teams'
 try:
     response = requests.get(team_url)
-    response.raise_for_status()
-    team = response.json()
-    team_df = pd.DataFrame(team)
-    st.write(team_df)
+    if response.status_code == 200:
+        data = response.json()
+        if data:
+            team_df = pd.DataFrame(data)
+            st.success(f"Found {len(team_df)} coaches!")
+            st.dataframe(team_df)
+            st.write(team_df)
+        else:
+            st.warning("No coaches matched your criteria.")
+    else:
+        st.error(f"API error. Status code: {response.status_code}")
 except Exception as e:
-    st.error(f"Error fetching team list: {e}")
-st.write(team_df)
+    st.error(f"Error connecting to API: {e}")
+
+
 st.markdown("----")
-st.subtitle(f"Get Coach and Player Info")
+st.subheader(f"Get Coach and Player Info")
 team_id = st.text_input("Enter Team ID:")
 
 
@@ -33,10 +41,18 @@ if team_id:
                 coach_df = pd.DataFrame(Cdata)
                 st.success(f"Found {len(coach_df)} coaches!")
                 st.dataframe(coach_df)
+                coach_df['Email'] = coach_df['FirstName'].str.lower() + coach_df['LastName'].str.lower() + '@easthigh.edu'
+                st.markdown("The Coach")
+                top = st.columns([1,1])
+                with top[0]:
+                    st.write("Name", coach_df['FirstName'], coach_df['LastName'])
+                with top[2]:
+                    st.write("Contact At:", coach_df['Email'])
+                st.markdown("----")
             else:
                 st.warning("No coaches matched your criteria.")
         else:
-            st.error(f"API error. Status code: {response.status_code}")
+            st.error(f"API error. Status code: {coach_response.status_code}")
     except Exception as e:
         st.error(f"Error connecting to API: {e}")
 
@@ -49,31 +65,18 @@ if team_id:
                 player_df = pd.DataFrame(Pdata)
                 st.success(f"Found {len(player_df)} players!")
                 st.dataframe(player_df)
+                st.markdown("The Players")
+                top = st.columns([1,1])
+                with top[0]:
+                    st.write("Name", player_df['FirstName'], player_df['LastName'])
+                with top[2]:
+                    st.write("Contact At:", player_df['Email'])
             else:
                 st.warning("No players matched your criteria.")
         else:
-            st.error(f"API error. Status code: {response.status_code}")
+            st.error(f"API error. Status code: {player_response.status_code}")
     except Exception as e:
         st.error(f"Error connecting to API: {e}")
-
-
-    coach_df['Email'] = coach_df['FirstName'].str.lower() + coach_df['LastName'].str.lower() + '@easthigh.edu'
-    player_df['Email'] = player_df['FirstName'].str.lower() + player_df['LastName'].str.lower() + '@easthigh.edu'
-    
-    st.markdown("The Coach")
-    top = st.columns([1,1])
-    with top[0]:
-        st.write("Name", coach_df['FirstName'], coach_df['LastName'])
-    with top[2]:
-        st.write("Contact At:", coach_df['Email'])
-    st.markdown("----")
-    st.markdown("The Players")
-    with top[0]:
-        st.write("Name", player_df['FirstName'], player_df['LastName'])
-    with top[2]:
-        st.write("Contact At:", player_df['Email'])
-    st.write(team_df)
-
 
 
 
