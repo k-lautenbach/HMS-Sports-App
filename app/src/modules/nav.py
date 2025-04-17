@@ -25,8 +25,8 @@ NAV_CONFIG = {
     "recruiter": [
         ("pages/Recruiter_Home.py", "Recruiter Home", "🧑‍💻"),
         ("pages/Recruiter_AthleteRecs.py", "Recommended Athletes", "🏃‍♂️"),
-        ("pages/Recruitment_Tool.py", "Recruitment Tool", "🛠️"),
-        ("pages/Recruitment_Events.py", "Recruitment Events", "📅")
+        ("pages/Recruiter_Tool.py", "Recruitment Tool", "🛠️"),
+        ("pages/Recruiter_Events.py", "Recruitment Events", "📅")
     ]
 }
 

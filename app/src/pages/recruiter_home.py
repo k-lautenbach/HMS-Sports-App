@@ -15,7 +15,7 @@ st.write("### What would you like to do today?")
 if st.button('Player Recruitment Tool', 
              type='primary', 
              use_container_width=True):
-    st.switch_page('pages/Recruitment_Tool.py')
+    st.switch_page('pages/Recruiter_Tool.py')
 
 if st.button('Recommended Athletes',
              type='primary',
@@ -25,7 +25,7 @@ if st.button('Recommended Athletes',
 if st.button('Manage Event Schedules',
              type='primary',
              use_container_width=True):
-    st.switch_page('pages/Recruitment_Events.py')
+    st.switch_page('pages/Recruiter_Events.py')
 
 st.markdown("---")
 st.subheader("🐻 Cal Goldstein")
