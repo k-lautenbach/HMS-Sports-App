@@ -8,14 +8,14 @@ from flask import jsonify
 from flask import make_response
 from flask import current_app
 from backend.db_connection import db
-
+athletic_director = Blueprint('athletic_director', __name__)
 #------------------------------------------------------------------
 #gets teams in the athletic program at their school
-athletic_director = Blueprint('athletic_director', __name__)
 @athletic_director.route('/athletic_director/teams', methods=['GET'])
 def get_teams():
     try:
         cursor = db.get_db().cursor()
+<<<<<<< HEAD
         query = '''
             SELECT * 
             FROM Team t
@@ -31,12 +31,34 @@ def get_teams():
 #------------------------------------------------------------------
 #gets coaches and their contacts in the athletic program at their school
 @athletic_director.route('/athletic_director/players', methods=['GET'])
+=======
+        high_school = request.args.get('high_school')
+
+        query = '''
+            SELECT Team.TeamName, Coach.First, Coach.Last, Team.HighSchoolName
+            FROM Team
+            LEFT JOIN Coach ON Team.CoachID = Coach.CoachID
+            WHERE Team.HighSchoolName = %s
+        '''
+        cursor.execute(query, (high_school,))
+        theData = cursor.fetchall()
+        print("✅ Fetched team data successfully")
+        return jsonify(theData), 200
+
+    except Exception as e:
+        print(f"🔥 ERROR in /athletic_director/teams route: {e}")
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
+#------------------------------------------------------------------
+#gets coaches and their contacts in the athletic program at their school
+
+@athletic_director.route('/athletic_director/coaches', methods=['GET'])
+>>>>>>> e013d9381d4c572e369c27c30ebad8ac63631b0f
 def get_players():
     cursor = db.get_db().cursor()
     query = '''
         SELECT Athlete.PlayerID, Athlete.FirstName, Athlete.LastName, Athlete.TeamID, Team.TeamID, Team.TeamName
         FROM Athlete
-        JOIN Team
+        JOIN Team ON Athlete.TeamID = Team.TeamID
         WHERE Athlete.TeamID IN (
             SELECT Team.TeamID FROM Team WHERE Team.HighSchoolName = %s);
     '''
@@ -45,6 +67,7 @@ def get_players():
     theData = cursor.fetchall()
     return jsonify(theData), 200
 #--------------------------------------------------------------
+<<<<<<< HEAD
 # #gets all of the schools a player has saved (for recruitment)
 # @athletic_director.route('/athletic_director/coaches', methods=['GET'])
 # def get_coaches():
@@ -61,6 +84,20 @@ def get_players():
 #     cursor.execute(query, (high_school_team),)
 #     theData = cursor.fetchall()
 #     return jsonify(theData), 200
+=======
+#gets all of the schools a player has saved (for recruitment)
+@athletic_director.route('/athletic_director/coaches', methods=['GET'])
+def get_coaches():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT Coach.FirstName, Coach.Last
+        FROM Coach
+    '''
+    high_school_team = request.args.get('team_id')
+    cursor.execute(query, (high_school_team),)
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
+>>>>>>> e013d9381d4c572e369c27c30ebad8ac63631b0f
 #------------------------------------------------------------------
 #gets all practices
 @athletic_director.route('/athletic_director/practices', methods=['GET'])
@@ -131,11 +168,11 @@ def add_coach():
     data = request.get_json()
     query = '''
         INSERT INTO Coach (
-            CoachID, FirstName, LastName, ContactID
+            CoachID, FirstName, LastName
         ) 
-        VALUES (%s, %s, %s, %s)
+        VALUES (%s, %s, %s)
     '''
-    values = (data.get('CoachID'), data.get('FirstName'), data.get('LastName'), data.get('ContactID'))
+    values = (data.get('CoachID'), data.get('FirstName'), data.get('LastName'))
     cursor.execute(query, values)
     db.get_db().commit()
     return jsonify({'message':'Coach added successfully'}), 200

@@ -51,6 +51,7 @@ with prof_layout[0]:
     st.image("assets/athletic_director.jpeg", width=250)
 
 mid = st.columns(3)
+<<<<<<< HEAD
 # TEST API
 import logging
 import streamlit as st
@@ -58,6 +59,12 @@ import requests
 from modules.nav import SideBarLinks
 import pandas as pd
 SideBarLinks()
+=======
+school_name = 'East High'
+api_url = 'http://api:4000/d/athletic_director/teams'
+params = {'high_school': school_name}
+response = requests.get(base_url, params=params)
+>>>>>>> e013d9381d4c572e369c27c30ebad8ac63631b0f
 
 st.write('test api connection')
 api_url = 'http://web-api:4000/d/athletic_director/teams'

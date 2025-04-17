@@ -1,9 +1,12 @@
 import streamlit as st
 import requests
 import logging
+from modules.nav import SideBarLinks
 
 st.set_page_config(layout='wide')
 logger = logging.getLogger(__name__)
+
+SideBarLinks()
 
 st.title("Jack Bolton")
 

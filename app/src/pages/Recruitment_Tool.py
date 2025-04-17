@@ -46,7 +46,7 @@ if st.button("Get Basketball Teams"):
 #------------------------------------------------------------------
 # shows a full team roster of a given team
 
-team_name = st.text_input("Enter Team Name")
+team_name = st.text_input("Enter Team Name", placeholder = "e.g. Wildcats")
 
 if st.button("View Team Roster"):
     if not team_name:

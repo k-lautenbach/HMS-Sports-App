@@ -4,6 +4,9 @@ from modules.nav import SideBarLinks
 
 SideBarLinks()
 
+if not st.session_state.get("authenticated", False):
+    st.sidebar.page_link("Home.py", label="Home", icon="🏠")
+
 st.write("# About BFA")
 
 st.markdown (
