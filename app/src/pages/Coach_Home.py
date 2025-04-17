@@ -49,18 +49,3 @@ if st.button("View Team Strategies"):
         except Exception as e:
             st.error(f"Error connecting to API: {e}")
 
-
-# Add user input new player
-with st.expander("Player"):
-    st.text_input("First Name")
-    st.text_input("Last Name")
-    st.text_input("Gender")
-    st.text_input("GPA")
-    st.text_input("Grade Level")
-    st.text_input("Height")
-    st.text_input("Position")
-    st.text_input("Recruitment Status")
-
-# Remove player using PlayerID
-with st.expander("Remove Player"):
-    st.text_input("Enter Player ID")
