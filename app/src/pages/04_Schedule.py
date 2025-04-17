@@ -3,9 +3,13 @@
 import streamlit as st
 import requests
 import pandas as pd
+from modules.nav import SideBarLinks
+
+st.set_page_config(layout="wide")
+
+SideBarLinks()
 
 # Streamlit page setup
-st.set_page_config(layout="wide")
 st.title("📅 My Schedule")
 
 # Constants (could be dynamically set by login/session later)
@@ -13,8 +17,6 @@ TEAM_ID = 1
 PLAYER_ID = 1
 API_BASE = "http://api:4000/cal/calendar"
 
-# -------------------------------
-# 🔄 Safe fetch helper function
 # -------------------------------
 def fetch_schedule_data(endpoint, params):
     try:
@@ -26,8 +28,6 @@ def fetch_schedule_data(endpoint, params):
         return []
 
 # -------------------------------
-# 🏀 Team Practices Section
-# -------------------------------
 st.subheader("🏀 Team Practices")
 
 practices = fetch_schedule_data(f"{API_BASE}/practices", {"team_id": TEAM_ID})
@@ -38,8 +38,7 @@ else:
     st.info("No upcoming practices scheduled.")
 
 # -------------------------------
-# 🎯 Upcoming Games Section
-# -------------------------------
+
 st.subheader("🎯 Upcoming Games")
 
 games = fetch_schedule_data(f"{API_BASE}/games", {"team_id": TEAM_ID})
@@ -49,8 +48,6 @@ if games:
 else:
     st.info("No upcoming games scheduled.")
 
-# -------------------------------
-# 🧲 Recruiting Events Section
 # -------------------------------
 st.subheader("🧲 Recruiting Events")
 
