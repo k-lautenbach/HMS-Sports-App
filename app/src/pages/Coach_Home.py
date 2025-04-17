@@ -49,15 +49,6 @@ if st.button("View Team Strategies"):
         except Exception as e:
             st.error(f"Error connecting to API: {e}")
 
-st.markdown("---")
-st.subheader("Team Stats")
-
-# Link to team stats page
-if st.button("View Team Stats", use_container_width=True):
-    st.switch_page("pages/Team_Stats.py")
-
-st.markdown("---")
-st.subheader("Manage Roster")
 
 # Add user input new player
 with st.expander("Player"):
