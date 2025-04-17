@@ -88,17 +88,34 @@ def get_player_info(player_id):
 #gets all practices (for specific player)
 @players.route('/players/practices', methods=['GET'])
 def get_practices():
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT *
-        FROM Practice
-        WHERE TeamID = %s
-        ORDER BY Date ASC;
-    '''
-    team_id = request.args.get('team_id')
-    cursor.execute(query, (team_id,))
-    theData = cursor.fetchall()
-    return jsonify(theData), 200
+    try:
+        team_id = request.args.get('team_id')
+        if not team_id:
+            return jsonify({'error': 'Missing team_id'}), 400
+
+        cursor = db.get_db().cursor()
+        query = '''
+            SELECT PracticeID, Date, Time, Location
+            FROM Practice
+            WHERE TeamID = %s
+            ORDER BY Date ASC;
+        '''
+        cursor.execute(query, (team_id,))
+        rows = cursor.fetchall()
+
+        # If empty, just return empty list
+        if not rows:
+            return jsonify([]), 200
+
+        colnames = [desc[0] for desc in cursor.description]
+
+        # Only return actual data rows (skip if column names got inserted somehow)
+        valid_rows = [row for row in rows if row[0] != colnames[0]]
+        return jsonify([dict(zip(colnames, row)) for row in valid_rows]), 200
+
+
+    except Exception as e:
+        return jsonify({'error': 'Failed to fetch practices', 'details': str(e)}), 500
 
 #------------------------------------------------------------------
 #gets all college teams with the average gpa is less than inputted 
@@ -146,3 +163,36 @@ def delete_school_of_interst():
     cursor.execute(query, (player_id, school_name))
     db.get_db().commit()
     return jsonify({'message': f'Successfully removed {school_name} from player {player_id}\'s interests'}), 200
+#------------------------------------------------------------------
+#get recruiting events for athletes
+@players.route('/players/recruitingevents', methods=['GET'])
+def get_recruiting_events():
+    try:
+        player_id = request.args.get('player_id')
+        if not player_id:
+            return jsonify({'error': 'Missing player_id'}), 400
+
+        cursor = db.get_db().cursor()
+        query = '''
+            SELECT re.EventID, re.DateTime AS Date, re.Location
+            FROM RecruitingEvents re
+            JOIN AthleteEvent ae ON re.EventID = ae.EventID
+            WHERE ae.PlayerID = %s
+            ORDER BY re.DateTime ASC;
+        '''
+        cursor.execute(query, (player_id,))
+        rows = cursor.fetchall()
+
+        # If empty, just return empty list
+        if not rows:
+            return jsonify([]), 200
+
+        colnames = [desc[0] for desc in cursor.description]
+
+        # Only return actual data rows (skip if column names got inserted somehow)
+        valid_rows = [row for row in rows if row[0] != colnames[0]]
+        return jsonify([dict(zip(colnames, row)) for row in valid_rows]), 200
+
+
+    except Exception as e:
+        return jsonify({'error': 'Failed to fetch recruiting events', 'details': str(e)}), 500
