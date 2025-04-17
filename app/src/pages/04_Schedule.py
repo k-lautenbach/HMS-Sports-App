@@ -15,7 +15,7 @@ st.title("📅 My Schedule")
 # Constants (could be dynamically set by login/session later)
 TEAM_ID = 1
 PLAYER_ID = 1
-API_BASE = "http://api:4000/cal/calendar"
+API_BASE = "http://web-api:4000/cal/calendar"
 
 # -------------------------------
 def fetch_schedule_data(endpoint, params):
