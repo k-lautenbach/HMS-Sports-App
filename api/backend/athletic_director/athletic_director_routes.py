@@ -29,18 +29,31 @@ def get_teams():
         return jsonify({"error": str(e)}), 500
 #------------------------------------------------------------------
 #gets coaches and their contacts in the athletic program at their school
+@athletic_director.route('/athletic_director/coaches', methods=['GET'])
+def get_players():
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT *
+        FROM Coach c
+        JOIN Team t on c.CoachID=t.CoachID
+        WHERE t.TeamID = %s
+    '''
+    team_id = request.args.get('team_id')
+    cursor.execute(query, (team_id,))
+    theData = cursor.fetchall()
+    return jsonify(theData), 200
+#------------------------------------------------------------------
+#gets coaches and their contacts in the athletic program at their school
 @athletic_director.route('/athletic_director/players', methods=['GET'])
 def get_players():
     cursor = db.get_db().cursor()
     query = '''
-        SELECT Athlete.PlayerID, Athlete.FirstName, Athlete.LastName, Athlete.TeamID, Team.TeamID, Team.TeamName
+        SELECT Athlete.FirstName, Athlete.LastName
         FROM Athlete
-        JOIN Team ON Athlete.TeamID = Team.TeamID
-        WHERE Athlete.TeamID IN (
-            SELECT Team.TeamID FROM Team WHERE Team.HighSchoolName = %s);
+        WHERE Athlete.TeamID = %s
     '''
-    high_school_team = request.args.get('team_id')
-    cursor.execute(query, (high_school_team),)
+    team_id = request.args.get('team_id')
+    cursor.execute(query, (team_id,))
     theData = cursor.fetchall()
     return jsonify(theData), 200
 #--------------------------------------------------------------
