@@ -10,7 +10,7 @@ def get_team_practices():
         if not team_id:
             return jsonify({'error': 'Missing team_id'}), 400
 
-        cursor = db.get_db().cursor()
+        cursor = db.get_db().cursor()       
         query = '''
             SELECT PracticeID, Date, Time, Location
             FROM Practice
@@ -20,6 +20,8 @@ def get_team_practices():
         cursor.execute(query, (team_id,))
         rows = cursor.fetchall()
         colnames = [desc[0] for desc in cursor.description]
+        print("🧪 DEBUG - rows:", rows)
+        print("🧪 DEBUG - colnames:", colnames)
         return jsonify([dict(zip(colnames, row)) for row in rows]), 200
 
     except Exception as e:
