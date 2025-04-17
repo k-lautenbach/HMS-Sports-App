@@ -11,6 +11,7 @@ from backend.db_connection import db
 athletic_director = Blueprint('athletic_director', __name__)
 #------------------------------------------------------------------
 #gets teams in the athletic program at their school
+@athletic_director.route('/athletic_director/teams', methods=['GET'])
 def get_teams():
     try:
         cursor = db.get_db().cursor()
@@ -155,7 +156,4 @@ def delete_practice():
     db.get_db().commit()
 
     return jsonify({'message': f'Successfully cancelled practice {practice_id}!'}), 200
-
-#------------------------------------------------------------------
-#gets all games
 

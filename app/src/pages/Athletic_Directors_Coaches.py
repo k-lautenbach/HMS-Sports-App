@@ -15,7 +15,7 @@ try:
         if data:
             st.write(data[0])
             team_df = pd.DataFrame(data)
-            team_df = team_df[['Name', 'TeamID']]
+            team_df = team_df[['TeamName', 'TeamID']]
             st.success(f"Found {len(team_df)} coaches!")
             st.dataframe(team_df)
         else:
@@ -46,7 +46,7 @@ if team_id:
                 st.markdown("The Coach")
                 top = st.columns([1,1])
                 with top[0]:
-                    st.write("Name", coach_df['FirstName'], coach_df['LastName'])
+                    st.write("TeamName", coach_df['FirstName'], coach_df['LastName'])
                 with top[2]:
                     st.write("Contact At:", coach_df['Email'])
                 st.markdown("----")
@@ -69,7 +69,7 @@ if team_id:
                 st.markdown("The Players")
                 top = st.columns([1,1])
                 with top[0]:
-                    st.write("Name", player_df['FirstName'], player_df['LastName'])
+                    st.write("TeamName", player_df['FirstName'], player_df['LastName'])
                 with top[2]:
                     st.write("Contact At:", player_df['Email'])
             else:
