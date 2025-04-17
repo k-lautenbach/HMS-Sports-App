@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-st.title("Troy Bolton's Stats")
+st.title("📈 Troy Bolton's Stats")
 
 TROY_STATS_ID = 1
 API_URL = f"http://api:4000/s/athletestats/{TROY_STATS_ID}"

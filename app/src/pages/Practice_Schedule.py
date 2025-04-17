@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-st.title("📅 My Schedule")
+st.title("Team Schedule")
 
 TEAM_ID = 1
 PLAYER_ID = 1
@@ -30,9 +30,3 @@ st.subheader("Upcoming Games")
 games = get_data(f"{API_URL}/games", {"team_id": TEAM_ID})
 df_games = pd.DataFrame(games)
 st.dataframe(df_games)
-
-# -------------------------------
-st.subheader("Recruiting Events")
-events = get_data(f"{API_URL}/recruitingevents", {"player_id": PLAYER_ID})
-df_events = pd.DataFrame(events)
-st.dataframe(df_events)

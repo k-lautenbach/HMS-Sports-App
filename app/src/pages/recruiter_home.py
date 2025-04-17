@@ -28,7 +28,7 @@ if st.button('Manage Event Schedules',
     st.switch_page('pages/Recruitment_Events.py')
 
 st.markdown("---")
-st.subheader("Cal Goldstein")
+st.subheader("🐻 Cal Goldstein")
 
 top = st.columns([2, 2, 1])
 

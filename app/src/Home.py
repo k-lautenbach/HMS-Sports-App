@@ -34,7 +34,7 @@ SideBarLinks(show_home=True)
 
 # set the title of the page and provide a simple prompt. 
 logger.info("Loading the Home page of the app")
-st.title('Break Free Athletics User Portal')
+st.title('👤 Break Free Athletics User Portal')
 st.write('\n\n')
 st.write('### Welcome! Which user would you like to act as today?')
 

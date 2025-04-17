@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import pandas as pd
 import logging
 from modules.nav import SideBarLinks
 
@@ -29,52 +30,22 @@ if st.button("Practice Schedule", use_container_width=True):
 st.markdown("---")
 st.subheader("Strategies/Plays")
 
-if "strategies" not in st.session_state:
-    st.session_state.strategies = [
-        "Man-to-Man Defense",
-        "Zone Defense",
-        "Full Court Press"
-    ]
 
-# add/delete strategies with user input
-action = st.radio("Select", ["Add", "Delete"], horizontal=True)
-user_input = st.text_input("Strategy")
+if st.button("View Team Strategies"):
+        try:
+            api_url = "http://web-api:4000/c/coach/strategies"
+            response = requests.get(api_url)
+            if response.status_code == 200:
+                data = response.json()
+                if data:
+                    df = pd.DataFrame(data)
+                    st.success(f"Found {len(df)} Strategies!")
+                    
+                    st.dataframe(df)
+                else:
+                    st.warning("No players matched your criteria.")
+            else:
+                st.error(f"API error. Status code: {response.status_code}")
+        except Exception as e:
+            st.error(f"Error connecting to API: {e}")
 
-if st.button("Submit"):
-    strategies = st.session_state.strategies
-
-    if action == "Add" and user_input:
-        strategies.append(user_input)
-    elif action == "Delete" and user_input in strategies:
-        strategies.remove(user_input)
-    st.session_state.strategies = strategies
-
-st.markdown("### Current Plays")
-with st.container():
-    for strat in st.session_state.strategies:
-        st.markdown(f"- {strat}")
-
-st.markdown("---")
-st.subheader("Team Stats")
-
-# Link to team stats page
-if st.button("View Team Stats", use_container_width=True):
-    st.switch_page("pages/Team_Stats.py")
-
-st.markdown("---")
-st.subheader("Manage Roster")
-
-# Add user input new player
-with st.expander("Player"):
-    st.text_input("First Name")
-    st.text_input("Last Name")
-    st.text_input("Gender")
-    st.text_input("GPA")
-    st.text_input("Grade Level")
-    st.text_input("Height")
-    st.text_input("Position")
-    st.text_input("Recruitment Status")
-
-# Remove player using PlayerID
-with st.expander("Remove Player"):
-    st.text_input("Enter Player ID")
