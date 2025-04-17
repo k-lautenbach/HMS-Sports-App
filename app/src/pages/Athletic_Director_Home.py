@@ -33,6 +33,11 @@ if st.button('See and Manage East Highs Schedule',
              use_container_width=True):
     st.switch_page('pages/Athletic_Director_Sched.py')
 
+if st.button('test api',
+             type='primary',
+             use_container_width=True):
+    st.switch_page('pages/TEST_API.py')
+
 st.markdown("---")
 st.header("Your Profile")
 st.subheader('Ethan Wilson')
@@ -46,32 +51,32 @@ with prof_layout[0]:
     st.image("assets/athletic_director.jpeg", width=250)
 
 mid = st.columns(3)
-school_name = 'East High'
-base_url = 'http://api:4000/d/teams'
-params = {'high_school': school_name}
-response = requests.get(base_url, params=params)
+# TEST API
+import logging
+import streamlit as st
+import requests
+from modules.nav import SideBarLinks
+import pandas as pd
+SideBarLinks()
 
-def get_teams():
- try:
-        response = requests.get(base_url, params=params)
-        st.write(f"Response status: {response.status_code}")
-        if response.status_code == 404:
-            st.error("API endpoint not found. Please check if the backend server is running and the endpoint exists.")
-            return []
-        if response.ok:
-            return response.json()
+st.write('test api connection')
+api_url = 'http://web-api:4000/d/athletic_director/teams'
+
+try:
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        data = response.json()
+        if data:
+            df = pd.DataFrame(data)
+            st.success(f"Found {len(df)} events!")
+            
+            st.dataframe(df)
         else:
-            st.error(f"API returned error: {response.status_code}")
-            st.error(f"Response text: {response.text}")
-            return []
- except requests.exceptions.RequestException as e:
-        st.error(f"Error connecting to API: {str(e)}")
-        return []
-
-teams = get_teams()
-number_managed = len(teams) if teams else 0
-
-
+            st.warning("No players matched your criteria.")
+    else:
+        st.error(f"API error. Status code: {response.status_code}")
+except Exception as e:
+    st.error(f"Error connecting to API: {e}")
 
 with prof_layout[1]:
     st.markdown("Your Contact Info")
