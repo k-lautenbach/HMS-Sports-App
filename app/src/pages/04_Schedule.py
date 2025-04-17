@@ -7,7 +7,6 @@ st.set_page_config(layout="wide")
 
 SideBarLinks()
 
-# Streamlit page setup
 st.title("📅 My Schedule")
 
 TEAM_ID = 1
