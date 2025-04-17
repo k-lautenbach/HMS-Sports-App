@@ -196,3 +196,20 @@ def get_recruiting_events():
 
     except Exception as e:
         return jsonify({'error': 'Failed to fetch recruiting events', 'details': str(e)}), 500
+    
+@players.route('/players', methods=['GET'])
+def get_players_for_team_1():
+    try:
+        query = '''
+            SELECT PlayerID, FirstName, LastName, Gender, GPA,
+                   GradeLevel, Height, Position, RecruitmentStatus
+            FROM Athlete
+            WHERE TeamID = 1
+        '''
+        cursor = db.get_db().cursor()
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return jsonify(result), 200
+    except Exception as e:
+        current_app.logger.error(f"Error fetching players for Team 1: {e}")
+        return jsonify({"error": str(e)}), 500
