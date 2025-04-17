@@ -21,11 +21,11 @@ with col2:
 
 st.markdown("---")
 
-st.subheader("Practices")
+st.subheader("Practices and Games")
 
-# link to practice schedule page
-if st.button("Practice Schedule", use_container_width=True):
-    st.switch_page("pages/Practice_Schedule.py")
+# link to practice and game schedule page
+if st.button("Practice and Game Schedule", use_container_width=True):
+    st.switch_page("pages/Practice_Game_Schedule.py")
 
 st.markdown("---")
 st.subheader("Strategies/Plays")
