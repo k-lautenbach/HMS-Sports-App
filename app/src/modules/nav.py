@@ -1,91 +1,71 @@
-# Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
-
 import streamlit as st
 
-#### ------------------------ General ------------------------
+# ------------------------ Navigation Configurations ------------------------
+
+NAV_CONFIG = {
+    "athletic_director": [
+        ("pages/Athletic_Director_Home.py", "Athletic Director Home", "🧍‍♂️")
+    ],
+    "coach": [
+        ("pages/Coach_Home.py", "Coach Home", "👨‍💼")
+    ],
+    "athlete": [
+        ("pages/Athlete_Home.py", "Athlete Home", "🏃‍♂️")
+    ],
+    "recruiter": [
+        ("pages/Recruiter_Home.py", "Recruiter Home", "🧑‍💻"),
+        ("pages/Recruiter_AthleteRecs.py", "Recommended Athletes", "🏃‍♂️"),
+        ("pages/Recruitment_Tool.py", "Recruitment Tool", "🛠️"),
+        ("pages/Recruitment_Events.py", "Recruitment Events", "📅")
+    ]
+}
+
+# ------------------------ Individual Page Navs ------------------------
+
 def HomeNav():
     st.sidebar.page_link("Home.py", label="Home", icon="🏠")
-
 
 def AboutPageNav():
     st.sidebar.page_link("pages/About.py", label="About", icon="❓")
 
+# ------------------------ Main Navigation Sidebar ------------------------
 
-#### ------------------------ Role of Athletic Director ------------------------
-def AthleticDirectorHomeNav():
-    st.sidebar.page_link(
-        "pages/Athletic_Director_Home.py", label="Athletic Director Home", icon="🧍‍♂️"
-    )
-
-
-## ------------------------ Role of Coach ------------------------
-def CoachHomeNav():
-    st.sidebar.page_link(
-        "pages/Coach_Home.py", label="Coach Home", icon="👨‍💼"
-    )
-
-
-#### ------------------------ Role of Player ------------------------
-def AthletesHomeNav():
-     st.sidebar.page_link(
-        "pages/Athlete_Home.py", label="Athlete Home", icon="🏃‍♂️"
-    )
-
-#### ------------------------ Role of Recruiter ------------------------
-def RecruiterHomeNav():
-     st.sidebar.page_link(
-        "pages/Recruiter_Home.py", label="Recruiter Home", icon="🧑‍💻"
-    )
-     st.sidebar.page_link(
-         "pages/Recruiter_AthleteRecs.py", label="Recommended Athletes", icon = "🏃‍♂️"
-     )
-     st.sidebar.page_link(
-        "pages/Recruitment_Tool.py", label="Recruitment Tool", icon = "🛠️"
-     )
-     st.sidebar.page_link(
-        "pages/Recruitment_Events.py", label="Recruitment Events", icon = "📅"
-     )
-
-# --------------------------------Links Function -----------------------------------------------
 def SideBarLinks(show_home=False):
-
-    # add a logo to the sidebar always
+    # Add logo to sidebar
     st.sidebar.image("assets/bfa.logo.png", width=150)
 
-    # If there is no logged in user, redirect to the Home (Landing) page
+    # Ensure session_state has default values
     if "authenticated" not in st.session_state:
-        st.session_state.authenticated = False
-        st.switch_page("Home.py")    
+        st.session_state["authenticated"] = False
+        st.switch_page("Home.py")
 
+    # Optional: Welcome message if logged in
+    if st.session_state["authenticated"] and "first_name" in st.session_state:
+        st.sidebar.markdown(f"👋 Welcome, **{st.session_state['first_name']}**!")
+
+    # Show Home nav link if specified
     if show_home:
-        # Show the Home page link (the landing page)
         HomeNav()
 
-    # Show the other page navigators depending on the users' role.
-    if st.session_state["authenticated"]:
+    # Show role-based links if authenticated
+    if st.session_state["authenticated"] and "role" in st.session_state:
+        role = st.session_state["role"]
 
-        # if the user role is an athletic director, give them acces to the AD page
-        if st.session_state["role"] == "athletic_director":
-            AthleticDirectorHomeNav()
+        if role in NAV_CONFIG:
+            for path, label, icon in NAV_CONFIG[role]:
+                st.sidebar.page_link(path, label=label, icon=icon)
+        else:
+            st.sidebar.warning("⚠️ Unknown role. Please return to Home.")
+    elif st.session_state["authenticated"]:
+        st.sidebar.warning("⚠️ Missing user role. Please return to Home.")
 
-        # If the user role is coach, give them access to the coach page
-        if st.session_state["role"] == "coach":
-            CoachHomeNav()
-
-        # If the user is an player, give them access to the athlete pages
-        if st.session_state["role"] == "athlete":
-            AthletesHomeNav()
-
-         # If the user is a recruiter, give them access to the recruiter pages
-        if st.session_state["role"] == "recruiter":
-            RecruiterHomeNav()
-
-    # Always show the About page at the bottom of the list of links
+    # Always show the About page
     AboutPageNav()
 
+    # Logout button if logged in
     if st.session_state["authenticated"]:
-        # Always show a logout button if there is a logged in user
         if st.sidebar.button("Logout"):
-            del st.session_state["role"]
-            del st.session_state["authenticated"]
+            for key in ["role", "authenticated", "first_name"]:
+                if key in st.session_state:
+                    del st.session_state[key]
             st.switch_page("Home.py")
