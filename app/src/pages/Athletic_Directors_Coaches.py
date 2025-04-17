@@ -13,11 +13,9 @@ try:
     if response.status_code == 200:
         data = response.json()
         if data:
-            st.write(data[0])
-            team_df = pd.DataFrame(data)
-            team_df = team_df[['TeamName', 'TeamID']]
-            st.success(f"Found {len(team_df)} coaches!")
-            st.dataframe(team_df)
+            df = pd.DataFrame(data)
+            st.success(f"Found {len(df)} coaches!")
+            st.dataframe(df)
         else:
             st.warning("No coaches matched your criteria.")
     else:
@@ -25,59 +23,71 @@ try:
 except Exception as e:
     st.error(f"Error connecting to API: {e}")
 
+#------------------------------------
+# coach and player info
 
 st.markdown("----")
-st.subheader(f"Get Coach and Player Info")
-team_id = st.text_input("Enter Team ID:")
 
+st.title("👨‍🏫 Get Coach Info")
 
-if team_id:
-    params = {'team_id': team_id}
-    coach_url = f'http://web-api:4000/d/athletic_director/coaches'
-    try:
-        coach_response = requests.get(coach_url, params=params)
-        if coach_response.status_code == 200:
-            Cdata = coach_response.json()
-            if Cdata:
-                st.write(data[0])
-                coach_df = pd.DataFrame(Cdata)
-                st.success(f"Found {len(coach_df)} coaches!")
-                coach_df['Email'] = coach_df['FirstName'].str.lower() + coach_df['LastName'].str.lower() + '@easthigh.edu'
-                st.markdown("The Coach")
-                top = st.columns([1,1])
-                with top[0]:
-                    st.write("TeamName", coach_df['FirstName'], coach_df['LastName'])
-                with top[2]:
-                    st.write("Contact At:", coach_df['Email'])
-                st.markdown("----")
+team_id = st.text_input("Enter Team ID:", placeholder="e.g., 1")
+
+if st.button("Get Coach Info"):
+    if not team_id:
+        st.warning("Please enter a Team ID.")
+    else:
+        # Encode and build request
+        encoded_id = requests.utils.quote(team_id)
+        api_url = f"http://web-api:4000/d/athletic_director/coaches?team_id={encoded_id}"
+
+        try:
+            with st.spinner("Fetching coach data..."):
+                response = requests.get(api_url)
+
+            if response.status_code == 200:
+                data = response.json()
+
+                if data:
+                    df = pd.DataFrame(data)
+                    st.success(f"Found {len(df)} coach(es) for Team ID {team_id}")
+                    st.dataframe(df)
+                else:
+                    st.info("No coach data found for this team.")
             else:
-                st.warning("No coaches matched your criteria.")
-        else:
-            st.error(f"API error. Status code: {coach_response.status_code}")
-    except Exception as e:
-        st.error(f"Error connecting to API: {e}")
+                st.error(f"❌ {response.status_code}: {response.text}")
+        except Exception as e:
+            st.error(f"Could not contact API: {e}")
 
-    player_url = f'http://web-api:4000/d/athletic_director/players'
-    try:
-        player_response = requests.get(player_url, params=params)
-        if player_response.status_code == 200:
-            Pdata = player_response.json()
-            if Pdata:
-                st.write(data[0])
-                player_df = pd.DataFrame(Pdata)
-                st.success(f"Found {len(player_df)} players!")
-                st.markdown("The Players")
-                top = st.columns([1,1])
-                with top[0]:
-                    st.write("TeamName", player_df['FirstName'], player_df['LastName'])
-                with top[2]:
-                    st.write("Contact At:", player_df['Email'])
+# shows a full team roster of a given team
+st.title("Get Roster")
+team_id = st.text_input("Enter Team ID", placeholder = "e.g. 1, 2")
+
+if st.button("View Team Roster"):
+    if not team_id:
+        st.warning("Please enter a TeamID.")
+    else:
+        # Need to encode the team name for URL
+        encoded_teamid = requests.utils.quote(team_id)
+        api_url = f"http://web-api:4000/d/athletic_director/players?team_id={encoded_teamid}"
+        
+        try:
+            response = requests.get(api_url)
+            if response.status_code == 200:
+                data = response.json()
+                if data:
+                    df = pd.DataFrame(data)
+                    
+                    column_order = ['PlayerID', 'FirstName', 'LastName', 'Gender', 'GradeLevel', 
+                                   'GPA', 'Height', 'Position', 'RecruitmentStatus']
+                    
+                    df = df[[col for col in column_order if col in df.columns]]
+                    
+                    st.success(f"Found {len(df)} players on team '{team_id}'")
+                    st.dataframe(df)
+                else:
+                    st.warning(f"Team '{team_id}' not found in the database. Please check the spelling or try another team name.")
             else:
-                st.warning("No players matched your criteria.")
-        else:
-            st.error(f"API error. Status code: {player_response.status_code}")
-    except Exception as e:
-        st.error(f"Error connecting to API: {e}")
-
-
+                st.error(f"Failed to fetch data from the API. Status code: {response.status_code}")
+        except Exception as e:
+            st.error(f"Error connecting to server: {e}")
 

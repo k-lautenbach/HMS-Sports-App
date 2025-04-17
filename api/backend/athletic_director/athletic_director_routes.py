@@ -53,7 +53,7 @@ def get_players():
         team_id = request.args.get('team_id')
         cursor = db.get_db().cursor()
         query = '''
-            SELECT a.FirstName, a.LastName, a.TeamID, a.Email
+            SELECT *
             FROM Athlete a
             WHERE a.TeamID = %s
         '''
