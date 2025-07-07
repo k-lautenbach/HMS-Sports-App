@@ -1,6 +1,6 @@
 # HMS Sports Project Repository
 
-This repo contains our semester project for CS320: Intro to Databases. It includes our infrastructure setup (containers), project databases, and UI pages. 
+This repo contains our semester project for CS3200: Intro to Databases. It includes our infrastructure setup (containers), project databases, and UI pages. 
 
 ## Description
 An all-in-one database for a high school sport’s team that allows streamlined activity for it’s users. Because our app is focused on our specific user stories and personas, some aspects of the code are “hard coded” to display only results that pertain to them. 
